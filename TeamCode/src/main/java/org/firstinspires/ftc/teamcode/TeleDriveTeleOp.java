@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-@TeleOp(name = "TeleDriveTeleOp", group = "")
+@TeleOp(name = "TeleDriveTeleOp", group = "TeleDrive")
 public class TeleDriveTeleOp extends LinearOpMode {
     private DatagramSocket socket;
     private boolean canRunGamepadThread;
