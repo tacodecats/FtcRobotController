@@ -427,7 +427,7 @@ public class TeleDriveTeleOp extends LinearOpMode {
           }
 
           if(gamepad2.x) {
-              shooterServo.setPosition(0.35);
+              shooterServo.setPosition(0.30);
           } else {
               shooterServo.setPosition(0);
           }
