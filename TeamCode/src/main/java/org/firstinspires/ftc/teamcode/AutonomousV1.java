@@ -280,12 +280,12 @@ public class AutonomousV1 extends LinearOpMode {
     }
 
     public void targetZoneB(){
-        encoderDrive(.5, 20,20);
+        encoderDrive(.5, 97,97);
         sleep(30000);
     }
 
     public void targetZoneC(){
-        encoderDrive(.5, 30,30);
+        encoderDrive(.5, 119,119);
         sleep(30000);
     }
 
