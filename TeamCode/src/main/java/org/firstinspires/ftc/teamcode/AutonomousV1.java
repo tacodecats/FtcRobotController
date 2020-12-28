@@ -45,7 +45,7 @@ public class AutonomousV1 extends LinearOpMode {
     DcMotor BR = null;
     //Intake intake = new Intake(hardwareMap);
 
-    final double TICKS_PER_REV = 537.6;    // eg: TETRIX Motor Encoder
+    final double TICKS_PER_REV = 537.6;    // eg: goBILDA Motor Encoder
     final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
     final double WHEEL_DIAMETER_INCHES = 3.779528;     // For figuring circumference
     double TICKS_PER_INCH = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -278,12 +278,12 @@ public class AutonomousV1 extends LinearOpMode {
         encoderDrive(.5, 10,10);
         sleep(30000);
     }
-
+    //Steps for single ring
     public void targetZoneB(){
         encoderDrive(.5, 20,20);
         sleep(30000);
     }
-
+    //Steps for four rings
     public void targetZoneC(){
         encoderDrive(.5, 30,30);
         sleep(30000);
