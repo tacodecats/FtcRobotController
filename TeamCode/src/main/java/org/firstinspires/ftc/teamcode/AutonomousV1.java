@@ -281,6 +281,7 @@ public class AutonomousV1 extends LinearOpMode {
 
     public void targetZoneB(){
         encoderDrive(.5, 103,103);
+        strafeDrive(.3,-24,24);
         sleep(30000);
     }
 
