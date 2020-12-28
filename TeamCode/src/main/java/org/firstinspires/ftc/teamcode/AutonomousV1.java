@@ -275,7 +275,7 @@ public class AutonomousV1 extends LinearOpMode {
     }
 
     public void targetZoneA(){
-        encoderDrive(.5, 10,10);
+        encoderDrive(.5, 72,72);
         sleep(30000);
     }
     //Steps for single ring
