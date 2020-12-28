@@ -250,6 +250,13 @@ public class AutonomousV1 extends LinearOpMode {
         BR.setPower(Math.abs(speed));
         BL.setPower(Math.abs(speed));
 
+        while (FR.isBusy() || FL.isBusy() || BR.isBusy() || BL.isBusy()) {
+            telemetry.addData("Path", "Running");
+            telemetry.update();
+        }
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+
         FR.setPower(0);
         FL.setPower(0);
         BR.setPower(0);
