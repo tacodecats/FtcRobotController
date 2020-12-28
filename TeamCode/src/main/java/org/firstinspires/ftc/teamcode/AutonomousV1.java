@@ -275,17 +275,17 @@ public class AutonomousV1 extends LinearOpMode {
     }
 // based on the rings, driving to respective box
     public void targetZoneA(){
-        encoderDrive(.5, 72,72);
+        encoderDrive(.5, 78,78);
         sleep(30000);
     }
     //Steps for single ring
     public void targetZoneB(){
-        encoderDrive(.5, 97,97);
+        encoderDrive(.5, 103,103);
         sleep(30000);
     }
     //Steps for four rings
     public void targetZoneC(){
-        encoderDrive(.5, 119,119);
+        encoderDrive(.5, 125,125);
         sleep(30000);
     }
 
