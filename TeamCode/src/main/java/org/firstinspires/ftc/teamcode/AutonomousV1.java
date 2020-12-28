@@ -273,19 +273,19 @@ public class AutonomousV1 extends LinearOpMode {
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
-
+// based on the rings, driving to respective box
     public void targetZoneA(){
         encoderDrive(.5, 72,72);
         sleep(30000);
     }
     //Steps for single ring
     public void targetZoneB(){
-        encoderDrive(.5, 20,20);
+        encoderDrive(.5, 97,97);
         sleep(30000);
     }
     //Steps for four rings
     public void targetZoneC(){
-        encoderDrive(.5, 30,30);
+        encoderDrive(.5, 119,119);
         sleep(30000);
     }
 
