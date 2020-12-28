@@ -275,17 +275,21 @@ public class AutonomousV1 extends LinearOpMode {
     }
 // based on the rings, driving to respective box
     public void targetZoneA(){
+        //Move forward to box A
         encoderDrive(.5, 78,78);
         sleep(30000);
     }
     //Steps for single ring
     public void targetZoneB(){
+        //Move forward towards box B
         encoderDrive(.5, 103,103);
-        strafeDrive(.3,-24,24);
+        //Strafe left into box B (left and right numbers are negative)
+        strafeDrive(.5,-24,-24);
         sleep(30000);
     }
     //Steps for four rings
     public void targetZoneC(){
+        //Move forward to box C
         encoderDrive(.5, 125,125);
         sleep(30000);
     }
