@@ -273,7 +273,7 @@ public class AutonomousV1 extends LinearOpMode {
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
-
+// based on the rings, driving to respective box
     public void targetZoneA(){
         encoderDrive(.5, 72,72);
         sleep(30000);
