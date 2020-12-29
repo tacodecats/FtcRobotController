@@ -305,7 +305,7 @@ public class AutonomousV1 extends LinearOpMode {
 
     }
 
-    //Drop wobble goal into place
+    //Drop wobble goal into place.
     public void dropWobbleGoa() {
 
     }
