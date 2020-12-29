@@ -304,6 +304,12 @@ public class AutonomousV1 extends LinearOpMode {
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
+
+    //Drop wobble goal into place
+    public void dropWobbleGoal {
+
+    }
+
 // based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
