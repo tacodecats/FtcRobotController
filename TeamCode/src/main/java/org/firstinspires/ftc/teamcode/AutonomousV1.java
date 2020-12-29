@@ -312,7 +312,6 @@ public class AutonomousV1 extends LinearOpMode {
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(500);
         wobbleArmMotor.setPower(0);
-        dropWobbleGoal();
 
     }
 
@@ -321,6 +320,8 @@ public class AutonomousV1 extends LinearOpMode {
         //Move forward to box A
         encoderDrive(.8, 78,78);
         sleep(30000);
+        //placing wobble goal in square
+        dropWobbleGoal();
     }
     //Steps for single ring
     public void targetZoneB(){
