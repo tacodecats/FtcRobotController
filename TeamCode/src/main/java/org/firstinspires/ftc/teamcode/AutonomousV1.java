@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -42,7 +44,11 @@ public class AutonomousV1 extends LinearOpMode {
     DcMotor FR = null;
     DcMotor BL = null;
     DcMotor BR = null;
-    //Intake intake = new Intake(hardwareMap);
+    DcMotor intakeMotor;
+    DcMotor shooterMotor;
+    DcMotor wobbleArmMotor;
+    Servo shooterServo;
+    Servo wobbleArmServo;
 
     final double TICKS_PER_REV = 537.6;    // eg: goBILDA Motor Encoder
     final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
@@ -75,14 +81,40 @@ public class AutonomousV1 extends LinearOpMode {
             FR = hardwareMap.get(DcMotor.class, "frontRightMotor");
             BL = hardwareMap.get(DcMotor.class, "backLeftMotor");
             BR = hardwareMap.get(DcMotor.class, "backRightMotor");
+            intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
+            shooterMotor = hardwareMap.get(DcMotor.class, "shooterMotor");
+            wobbleArmMotor = hardwareMap.get(DcMotor.class, "wobbleArmMotor");
+            shooterServo = hardwareMap.get(Servo.class, "shooterServo");
+            wobbleArmServo = hardwareMap.get(Servo.class, "wobbleArmServo");
+
             //stop and reset
             FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
             // this offsets the two motors that are facing the opposite direction.
             FL.setDirection(DcMotor.Direction.REVERSE);
             BL.setDirection(DcMotor.Direction.REVERSE);
+
+            // Reverse shooter motor so it goes in the correct direction
+            intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            // Set drivetrain motors to brake when power is set to 0.
+            FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            // Set wobble arm motor encoder to 0.
+            wobbleArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            // Set wobble arm motor to use encoder
+            wobbleArmMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //Set servo position to 0
+            shooterServo.setPosition(0);
+            wobbleArmServo.setPosition(0);
         }
 
         /** Wait for the game to begin */
@@ -275,21 +307,21 @@ public class AutonomousV1 extends LinearOpMode {
 // based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
-        encoderDrive(.5, 78,78);
+        encoderDrive(.8, 78,78);
         sleep(30000);
     }
     //Steps for single ring
     public void targetZoneB(){
         //Move forward towards box B
-        encoderDrive(.5, 103,103);
+        encoderDrive(.8, 103,103);
         //Strafe left into box B (left and right numbers are negative)
-        strafeDrive(.5,-24,-24);
+        strafeDrive(.5,-30,-30);
         sleep(30000);
     }
     //Steps for four rings
     public void targetZoneC(){
         //Move forward to box C
-        encoderDrive(.5, 125,125);
+        encoderDrive(.8, 125,125);
         sleep(30000);
     }
 
