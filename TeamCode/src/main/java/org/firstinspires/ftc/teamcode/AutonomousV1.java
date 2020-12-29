@@ -315,6 +315,11 @@ public class AutonomousV1 extends LinearOpMode {
         sleep(500);
         wobbleArmServo.setPosition(0.35);
         sleep(500);
+        wobbleArmMotor.setTargetPosition(50);
+        wobbleArmMotor.setPower(0.5);
+        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(500);
+        wobbleArmMotor.setPower(0);
 
     }
 
