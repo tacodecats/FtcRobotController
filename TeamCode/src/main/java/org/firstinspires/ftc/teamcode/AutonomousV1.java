@@ -319,9 +319,10 @@ public class AutonomousV1 extends LinearOpMode {
     public void targetZoneA(){
         //Move forward to box A
         encoderDrive(.8, 78,78);
+        dropWobbleGoal();
         sleep(30000);
         //placing wobble goal in square
-        dropWobbleGoal();
+
     }
     //Steps for single ring
     public void targetZoneB(){
