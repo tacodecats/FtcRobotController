@@ -306,7 +306,12 @@ public class AutonomousV1 extends LinearOpMode {
     }
 
     //Drop wobble goal into place.
-    public void dropWobbleGoa() {
+    public void dropWobbleGoal() {
+        wobbleArmMotor.setTargetPosition(230);
+        wobbleArmMotor.setPower(0.5);
+        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(500);
+        wobbleArmMotor.setPower(0);
 
     }
 
