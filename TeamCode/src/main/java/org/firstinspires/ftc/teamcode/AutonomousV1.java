@@ -344,7 +344,7 @@ public class AutonomousV1 extends LinearOpMode {
     //Steps for four rings
     public void targetZoneC(){
         //Move forward to box C
-        encoderDrive(.8, 123,125);
+        encoderDrive(.8, 123,123);
         dropWobbleGoal();
         sleep(30000);
     }
