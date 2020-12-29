@@ -20,7 +20,6 @@ public class AutonomousV1 extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
-    String targetZone = "A";
 
     //Vuforia key required for tenserflow use. Registered TaCodeCats Vuforia developer license.
     private static final String VUFORIA_KEY =
