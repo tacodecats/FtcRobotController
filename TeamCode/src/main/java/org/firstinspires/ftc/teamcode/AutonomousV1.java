@@ -338,12 +338,14 @@ public class AutonomousV1 extends LinearOpMode {
         encoderDrive(.8, 103,103);
         //Strafe left into box B (left and right numbers are negative)
         strafeDrive(.5,-30,-30);
+        dropWobbleGoal();
         sleep(30000);
     }
     //Steps for four rings
     public void targetZoneC(){
         //Move forward to box C
         encoderDrive(.8, 125,125);
+        dropWobbleGoal();
         sleep(30000);
     }
 
