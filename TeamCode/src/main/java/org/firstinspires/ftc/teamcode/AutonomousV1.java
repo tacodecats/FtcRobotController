@@ -305,6 +305,12 @@ public class AutonomousV1 extends LinearOpMode {
 
     }
 
+    public void shootingRings() {
+        shooterMotor.setPower(-1);
+        sleep(4000);
+        shooterMotor.setPower(0);
+    }
+
     //Drop wobble goal into place.
     public void dropWobbleGoal() {
         wobbleArmMotor.setTargetPosition(220);
@@ -332,6 +338,7 @@ public class AutonomousV1 extends LinearOpMode {
         //placing wobble goal in square
         strafeDrive(.8,-14,-14);
         encoderDrive(.8,-12,-12);
+        shootingRings();
 
     }
     //Steps for single ring
@@ -343,6 +350,7 @@ public class AutonomousV1 extends LinearOpMode {
         dropWobbleGoal();
         sleep(30000);
         encoderDrive(.8,-35,-35);
+        shootingRings();
     }
     //Steps for four rings
     public void targetZoneC(){
@@ -352,6 +360,8 @@ public class AutonomousV1 extends LinearOpMode {
         sleep(30000);
         strafeDrive(.8,-14,-14);
         encoderDrive(.8,-12,-12);
+        shootingRings();
     }
+
 
 }
