@@ -50,7 +50,7 @@ public class AutonomousV1 extends LinearOpMode {
     Servo shooterServo;
     Servo wobbleArmServo;
 
-    final double TICKS_PER_REV = 537.6;    // eg: goBILDA Motor Encoder
+    final double TICKS_PER_REV = 537.6;    // eg: goBILDA Motor Encoder.
     final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
     final double WHEEL_DIAMETER_INCHES = 3.779528;     // For figuring circumference
     double TICKS_PER_INCH = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
