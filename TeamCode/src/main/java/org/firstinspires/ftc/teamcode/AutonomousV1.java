@@ -337,6 +337,7 @@ public class AutonomousV1 extends LinearOpMode {
         //placing wobble goal in square
         strafeDrive(.8,-14,-14);
         encoderDrive(.8,-12,-12);
+        shootingRings();
 
     }
     //Steps for single ring
@@ -348,6 +349,7 @@ public class AutonomousV1 extends LinearOpMode {
         dropWobbleGoal();
         sleep(30000);
         encoderDrive(.8,-35,-35);
+        shootingRings();
     }
     //Steps for four rings
     public void targetZoneC(){
@@ -357,6 +359,7 @@ public class AutonomousV1 extends LinearOpMode {
         sleep(30000);
         strafeDrive(.8,-14,-14);
         encoderDrive(.8,-12,-12);
+        shootingRings();
     }
 
 }
