@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,6 +11,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -49,6 +54,9 @@ public class AutonomousV1 extends LinearOpMode {
     DcMotor wobbleArmMotor;
     Servo shooterServo;
     Servo wobbleArmServo;
+    BNO055IMU imu;
+    Orientation angles;
+
 
     final double TICKS_PER_REV = 537.6;    // eg: goBILDA Motor Encoder.
     final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
@@ -76,6 +84,14 @@ public class AutonomousV1 extends LinearOpMode {
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
             tfod.setZoom(2.5, 16.0/9.0);
+
+            //Set IMU for drivetrain to drive straight
+            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+            parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+            parameters.calibrationDataFile = "BN055IMUCalibration.json";
+
+            imu = hardwareMap.get(BNO055IMU.class, "imu");
+            imu.initialize(parameters);
 
             FL = hardwareMap.get(DcMotor.class, "frontLeftMotor");
             FR = hardwareMap.get(DcMotor.class, "frontRightMotor");
@@ -121,6 +137,9 @@ public class AutonomousV1 extends LinearOpMode {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
+
+        //Set IMU angle orientation
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         if (opModeIsActive()) {
             // Put run blocks here.
@@ -199,6 +218,75 @@ public class AutonomousV1 extends LinearOpMode {
        tfodParameters.minResultConfidence = 0.8f;
        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+    public void encoderDriveImu(double speed, double leftInches, double rightInches, float targetAngle){
+        // this creates the variables that will be calculated
+        int newLeftFrontTarget = 0;
+        int newRightFrontTarget = 0;
+        int newLeftBackTarget = 0;
+        int newRightBackTarget = 0;
+        // it calculates the distance that the robot has to move when you use the method.
+        newLeftFrontTarget = FL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        newRightFrontTarget = FR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newRightBackTarget = BR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newLeftBackTarget = BL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        // this gets the position and makes the robot ready to move
+        FL.setTargetPosition(newLeftFrontTarget);
+        FR.setTargetPosition(newRightFrontTarget);
+        BR.setTargetPosition(newRightBackTarget);
+        BL.setTargetPosition(newLeftBackTarget);
+
+        //the robot will run to that position and stop once it gets to the position.
+        FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //this gets the absolute speed and converts it into power for the motor.
+        while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() < newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() < newRightBackTarget){
+            //Set IMU angle orientation
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            if (angles.firstAngle < targetAngle){
+                FR.setPower(Math.abs(speed) + .05);
+                FL.setPower(Math.abs(speed) - .05);
+                BR.setPower(Math.abs(speed) + .05);
+                BL.setPower(Math.abs(speed) - .05);
+            } else if (angles.firstAngle > targetAngle){
+                FR.setPower(Math.abs(speed) - .05);
+                FL.setPower(Math.abs(speed) + .05);
+                BR.setPower(Math.abs(speed) - .05);
+                BL.setPower(Math.abs(speed) + .05);
+            } else {
+                //this gets the absolute speed and converts it into power for the motor.
+                FR.setPower(Math.abs(speed));
+                FL.setPower(Math.abs(speed));
+                BR.setPower(Math.abs(speed));
+                BL.setPower(Math.abs(speed));
+            }
+        }
+
+        while (FR.isBusy() || FL.isBusy() || BR.isBusy() || BL.isBusy()) {
+            telemetry.addData("Path", "Running");
+            telemetry.update();
+        }
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+
+        FR.setPower(0);
+        FL.setPower(0);
+        BR.setPower(0);
+        BL.setPower(0);
+        // this stops the run to position.
+        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // resets all the data for the encoders.
+        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
     }
 
     public void encoderDrive(double speed, double leftInches, double rightInches){
@@ -308,17 +396,19 @@ public class AutonomousV1 extends LinearOpMode {
     public void shooterServoRings() {
         for(int i = 3; i > 0; i = i - 1) {
             shooterServo.setPosition(0.35);
-            sleep(200);
+            sleep(600);
             shooterServo.setPosition(0);
-            sleep(200);
+            sleep(600);
         }
     }
+
+    public void powerOnShooterMotor() {
+        shooterMotor.setPower(-1);
+    }
+
     public void shootingRings() {
-            shooterMotor.setPower(-1);
-            sleep(1000);
-            shooterServoRings();
-            shooterMotor.setPower(0);
-            sleep(200);
+        shooterServoRings();
+        shooterMotor.setPower(0);
     }
 
     //Drop wobble goal into place.
@@ -342,39 +432,42 @@ public class AutonomousV1 extends LinearOpMode {
 // based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
-        encoderDrive(.8, 78,78);
+        encoderDriveImu(.8, 78,78, 0);
+        //Place wobble goal in square
         dropWobbleGoal();
-        sleep(30000);
-        //placing wobble goal in square
+        //Strafe robot it the left
         strafeDrive(.8,-14,-14);
-        encoderDrive(.8,-12,-12);
-        encoderDrive(.8,-18,18);
+        //Move robot to shooter zone
+         encoderDrive(.8,-18.5,-18.5);
+        //Power on shooter motor
+        powerOnShooterMotor();
+        //Turn robot to face ring goal
+        encoderDrive(.8,-49,49);
         shootingRings();
-
+        sleep(30000);
     }
     //Steps for single ring
     public void targetZoneB(){
         //Move forward towards box B
-        encoderDrive(.8, 103,103);
+        encoderDriveImu(.8, 103,103, 0);
         //Strafe left into box B (left and right numbers are negative)
         strafeDrive(.5,-30,-30);
         dropWobbleGoal();
-        sleep(30000);
         encoderDrive(.8,-35,-35);
         encoderDrive(.8,-18,18);
         shootingRings();
-
+        sleep(30000);
     }
     //Steps for four rings
     public void targetZoneC(){
         //Move forward to box C
-        encoderDrive(.8, 123,123);
+        encoderDriveImu(.8, 123,123, 0);
         dropWobbleGoal();
-        sleep(30000);
         strafeDrive(.8,-14,-14);
         encoderDrive(.8,-12,-12);
         encoderDrive(.8,-18,18);
         shootingRings();
+        sleep(30000);
     }
 
 }

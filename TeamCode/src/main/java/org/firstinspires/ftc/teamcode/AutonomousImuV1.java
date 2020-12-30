@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-@Autonomous(name = "AutonomousV1")
+@Autonomous(name = "AutonomousImuV1")
 
 public class AutonomousImuV1 extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
@@ -136,7 +136,7 @@ public class AutonomousImuV1 extends LinearOpMode {
         waitForStart();
 
         //Set IMU angle orientation
-       angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+       angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         if (opModeIsActive()) {
             // Put run blocks here.
@@ -242,7 +242,7 @@ public class AutonomousImuV1 extends LinearOpMode {
 
         while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() < newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() < newRightBackTarget){
             //Set IMU angle orientation
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             if (angles.firstAngle < targetAngle){
                 FR.setPower(Math.abs(speed) + .05);
                 FL.setPower(Math.abs(speed) - .05);
@@ -360,13 +360,12 @@ public class AutonomousImuV1 extends LinearOpMode {
     public void targetZoneA(){
         //Move forward to box A
         encoderDrive(.8, 78,78, 0);
-        //placing wobble goal in square
+       /* //placing wobble goal in square
         dropWobbleGoal();
         //Go to ring scoring zone
         strafeDrive(.5,-17,-17);
         encoderDrive(.8,-18,-18,0);
-        sleep(30000);
-
+        */ sleep(30000);
     }
     //Steps for single ring
     public void targetZoneB(){
