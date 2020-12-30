@@ -136,7 +136,7 @@ public class AutonomousImuV1 extends LinearOpMode {
         waitForStart();
 
         //Set IMU angle orientation
-       angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+       angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
         if (opModeIsActive()) {
             // Put run blocks here.
@@ -217,7 +217,7 @@ public class AutonomousImuV1 extends LinearOpMode {
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
-    public void encoderDrive(double speed, double leftInches, double rightInches){
+    public void encoderDrive(double speed, double leftInches, double rightInches, float targetAngle){
         // this creates the variables that will be calculated
         int newLeftFrontTarget = 0;
         int newRightFrontTarget = 0;
@@ -239,11 +239,28 @@ public class AutonomousImuV1 extends LinearOpMode {
         FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //this gets the absolute speed and converts it into power for the motor.
-        FR.setPower(Math.abs(speed));
-        FL.setPower(Math.abs(speed));
-        BR.setPower(Math.abs(speed));
-        BL.setPower(Math.abs(speed));
+
+        while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() < newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() < newRightBackTarget){
+            //Set IMU angle orientation
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            if (angles.firstAngle < targetAngle){
+                FR.setPower(Math.abs(speed) + .05);
+                FL.setPower(Math.abs(speed) - .05);
+                BR.setPower(Math.abs(speed) + .05);
+                BL.setPower(Math.abs(speed) - .05);
+            } else if (angles.firstAngle > targetAngle){
+                FR.setPower(Math.abs(speed) - .05);
+                FL.setPower(Math.abs(speed) + .05);
+                BR.setPower(Math.abs(speed) - .05);
+                BL.setPower(Math.abs(speed) + .05);
+            } else {
+                //this gets the absolute speed and converts it into power for the motor.
+                FR.setPower(Math.abs(speed));
+                FL.setPower(Math.abs(speed));
+                BR.setPower(Math.abs(speed));
+                BL.setPower(Math.abs(speed));
+            }
+        }
 
         while (FR.isBusy() || FL.isBusy() || BR.isBusy() || BL.isBusy()) {
             telemetry.addData("Path", "Running");
@@ -342,36 +359,36 @@ public class AutonomousImuV1 extends LinearOpMode {
 // based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
-        encoderDrive(.8, 78,78);
+        encoderDrive(.8, 78,78, 0);
         //placing wobble goal in square
         dropWobbleGoal();
         //Go to ring scoring zone
-        strafeDrive(.8,-17,-17);
-        encoderDrive(.8,-18,-18);
+        strafeDrive(.5,-17,-17);
+        encoderDrive(.8,-18,-18,0);
         sleep(30000);
 
     }
     //Steps for single ring
     public void targetZoneB(){
         //Move forward towards box B
-        encoderDrive(.8, 103,103);
+        encoderDrive(.8, 103,103,0);
         //Strafe left into box B (left and right numbers are negative)
         strafeDrive(.5,-30,-30);
         //placing wobble goal in square
         dropWobbleGoal();
         //Go to ring scoring zone
-        encoderDrive(.8,-35,-35);
+        encoderDrive(.8,-35,-35,0);
         sleep(30000);
     }
     //Steps for four rings
     public void targetZoneC(){
         //Move forward to box C
-        encoderDrive(.8, 123,123);
+        encoderDrive(.8, 123,123,0);
         //placing wobble goal in square
         dropWobbleGoal();
         //Go to ring scoring zone
-        strafeDrive(.8,-14,-14);
-        encoderDrive(.8,-12,-12);
+        strafeDrive(.5,-14,-14);
+        encoderDrive(.8,-12,-12,0);
         sleep(30000);
     }
 

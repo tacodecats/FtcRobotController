@@ -54,8 +54,6 @@ public class AutonomousV1 extends LinearOpMode {
     DcMotor wobbleArmMotor;
     Servo shooterServo;
     Servo wobbleArmServo;
-    BNO055IMU imu;
-    Orientation angles;
 
     final double TICKS_PER_REV = 537.6;    // eg: goBILDA Motor Encoder
     final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
@@ -337,7 +335,7 @@ public class AutonomousV1 extends LinearOpMode {
         //placing wobble goal in square
         dropWobbleGoal();
         //Go to ring scoring zone
-        strafeDrive(.8,-17,-17);
+        strafeDrive(.5,-17,-17);
         encoderDrive(.8,-18,-18);
         sleep(30000);
 
@@ -361,7 +359,7 @@ public class AutonomousV1 extends LinearOpMode {
         //placing wobble goal in square
         dropWobbleGoal();
         //Go to ring scoring zone
-        strafeDrive(.8,-14,-14);
+        strafeDrive(.5,-14,-14);
         encoderDrive(.8,-12,-12);
         sleep(30000);
     }
