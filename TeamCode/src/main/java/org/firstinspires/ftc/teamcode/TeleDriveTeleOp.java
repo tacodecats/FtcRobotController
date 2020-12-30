@@ -412,17 +412,17 @@ public class TeleDriveTeleOp extends LinearOpMode {
           }
 
           if (gamepad2.dpad_right) {
-              wobbleArmMotor.setTargetPosition(230);
-              wobbleArmMotor.setPower(0.5);
+              wobbleArmMotor.setTargetPosition(210);
+              wobbleArmMotor.setPower(0.4);
               wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-              sleep(500);
+              sleep(700);
               wobbleArmMotor.setPower(0);
           }
           if (gamepad2.dpad_left) {
-              wobbleArmMotor.setTargetPosition(50);
-              wobbleArmMotor.setPower(0.5);
+              wobbleArmMotor.setTargetPosition(70);
+              wobbleArmMotor.setPower(0.4);
               wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-              sleep(500);
+              sleep(700);
               wobbleArmMotor.setPower(0);
           }
 

@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -21,9 +19,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-@Autonomous(name = "AutonomousImuV1")
+@Autonomous(name = "AutonomousV1")
 
-public class AutonomousV1 extends LinearOpMode {
+public class AutonomousImuV1 extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
@@ -84,6 +82,14 @@ public class AutonomousV1 extends LinearOpMode {
             // (typically 16/9).
             tfod.setZoom(2.5, 16.0/9.0);
 
+            //Set IMU for drivetrain to drive straight
+            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+            parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+            parameters.calibrationDataFile = "BN055IMUCalibration.json";
+
+            imu = hardwareMap.get(BNO055IMU.class, "imu");
+            imu.initialize(parameters);
+
             FL = hardwareMap.get(DcMotor.class, "frontLeftMotor");
             FR = hardwareMap.get(DcMotor.class, "frontRightMotor");
             BL = hardwareMap.get(DcMotor.class, "backLeftMotor");
@@ -128,6 +134,9 @@ public class AutonomousV1 extends LinearOpMode {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
+
+        //Set IMU angle orientation
+       angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         if (opModeIsActive()) {
             // Put run blocks here.
