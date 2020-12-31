@@ -390,7 +390,6 @@ public class AutonomousV1 extends LinearOpMode {
         FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
     }
 
     public void shooterServoRings() {
@@ -432,42 +431,48 @@ public class AutonomousV1 extends LinearOpMode {
 // based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
-        encoderDriveImu(.8, 78,78, 0);
+        encoderDriveImu(1, 78,78, 0);
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        strafeDrive(.8,-14,-14);
+        strafeDrive(1,-14,-14);
         //Move robot to shooter zone
-         encoderDrive(.8,-18.5,-18.5);
+         encoderDrive(1,-18.5,-18.5);
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.8,-49,49);
+        encoderDrive(1,-49,49);
         shootingRings();
-        sleep(30000);
+        sleep(20000);
     }
     //Steps for single ring
     public void targetZoneB(){
         //Move forward towards box B
-        encoderDriveImu(.8, 103,103, 0);
+        encoderDriveImu(1, 103,103, 0);
         //Strafe left into box B (left and right numbers are negative)
-        strafeDrive(.5,-30,-30);
+        strafeDrive(1,-30,-30);
         dropWobbleGoal();
-        encoderDrive(.8,-35,-35);
-        encoderDrive(.8,-18,18);
+        encoderDrive(1,-35,-35);
+        //Power on shooter motor
+        powerOnShooterMotor();
+        //Turn robot to face ring goal
+        encoderDrive(1,-49,49);
         shootingRings();
-        sleep(30000);
+        sleep(20000);
     }
     //Steps for four rings
     public void targetZoneC(){
         //Move forward to box C
-        encoderDriveImu(.8, 123,123, 0);
+        encoderDriveImu(1, 123,123, 0);
         dropWobbleGoal();
-        strafeDrive(.8,-14,-14);
-        encoderDrive(.8,-12,-12);
-        encoderDrive(.8,-18,18);
+        strafeDrive(1,-14,-14);
+        encoderDrive(1,-12,-12);
+        //Power on shooter motor
+        powerOnShooterMotor();
+        //Turn robot to face ring goal
+        encoderDrive(1,-49,49);
         shootingRings();
-        sleep(30000);
+        sleep(20000);
     }
 
 }
