@@ -428,7 +428,7 @@ public class AutonomousV1 extends LinearOpMode {
 
     }
 
-// based on the rings, driving to respective box
+// Based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
         encoderDriveImu(1, 78,78, 0);
