@@ -122,11 +122,11 @@ public class AutonomousV1 extends LinearOpMode {
             FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            // Set wobble arm motor encoder to 0.
-            wobbleArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
             // Set wobble arm motor to use encoder
             wobbleArmMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            // Set wobble arm motor encoder to 0.
+            wobbleArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             //Set servo position to 0
             shooterServo.setPosition(0);
@@ -413,7 +413,7 @@ public class AutonomousV1 extends LinearOpMode {
     //Drop wobble goal into place.
     public void dropWobbleGoal() {
         wobbleArmMotor.setTargetPosition(210);
-        wobbleArmMotor.setPower(0.4);
+        wobbleArmMotor.setPower(0.5);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(500);
         wobbleArmMotor.setPower(0);
@@ -435,14 +435,15 @@ public class AutonomousV1 extends LinearOpMode {
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        strafeDrive(1,-14,-14);
+        strafeDrive(.75,-15,-15);
         //Move robot to shooter zone
-         encoderDrive(1,-18.5,-18.5);
+        encoderDrive(.75,-19,-19);
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(1,-49,49);
-        //shootingRings();
+        encoderDrive(.75,-49,49);
+        shootingRings();
+
         sleep(20000);
     }
     //Steps for single ring
@@ -456,7 +457,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(1,-49,49);
+        encoderDrive(1,-48.5,48.5);
         shootingRings();
         sleep(20000);
     }
