@@ -412,16 +412,16 @@ public class AutonomousV1 extends LinearOpMode {
 
     //Drop wobble goal into place.
     public void dropWobbleGoal() {
-        wobbleArmMotor.setTargetPosition(220);
-        wobbleArmMotor.setPower(0.5);
+        wobbleArmMotor.setTargetPosition(210);
+        wobbleArmMotor.setPower(0.4);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(500);
         wobbleArmMotor.setPower(0);
-        sleep(500);
+        sleep(250);
         wobbleArmServo.setPosition(0.35);
-        sleep(500);
+        sleep(250);
         wobbleArmMotor.setTargetPosition(50);
-        wobbleArmMotor.setPower(0.5);
+        wobbleArmMotor.setPower(0.4);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(500);
         wobbleArmMotor.setPower(0);
@@ -431,18 +431,18 @@ public class AutonomousV1 extends LinearOpMode {
 // based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
-        encoderDriveImu(1, 78,78, 0);
+        //encoderDriveImu(1, 78,78, 0);
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        strafeDrive(1,-14,-14);
+        //strafeDrive(1,-14,-14);
         //Move robot to shooter zone
-         encoderDrive(1,-18.5,-18.5);
+         //encoderDrive(1,-18.5,-18.5);
         //Power on shooter motor
-        powerOnShooterMotor();
+        //powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(1,-49,49);
-        shootingRings();
+        //encoderDrive(1,-49,49);
+        //shootingRings();
         sleep(20000);
     }
     //Steps for single ring
