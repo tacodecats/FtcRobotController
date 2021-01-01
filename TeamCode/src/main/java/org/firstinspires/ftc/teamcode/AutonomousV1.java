@@ -431,17 +431,17 @@ public class AutonomousV1 extends LinearOpMode {
 // based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
-        //encoderDriveImu(1, 78,78, 0);
+        encoderDriveImu(1, 78,78, 0);
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        //strafeDrive(1,-14,-14);
+        strafeDrive(1,-14,-14);
         //Move robot to shooter zone
-         //encoderDrive(1,-18.5,-18.5);
+         encoderDrive(1,-18.5,-18.5);
         //Power on shooter motor
-        //powerOnShooterMotor();
+        powerOnShooterMotor();
         //Turn robot to face ring goal
-        //encoderDrive(1,-49,49);
+        encoderDrive(1,-49,49);
         //shootingRings();
         sleep(20000);
     }
