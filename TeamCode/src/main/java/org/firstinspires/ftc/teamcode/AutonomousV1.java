@@ -461,7 +461,7 @@ public class AutonomousV1 extends LinearOpMode {
         shootingRings();
         sleep(20000);
     }
-    //Steps for four rings.
+    //Steps for four rings
     public void targetZoneC(){
         //Move forward to box C
         encoderDriveImu(1, 123,123, 0);
