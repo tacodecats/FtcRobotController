@@ -220,7 +220,7 @@ public class AutonomousV1 extends LinearOpMode {
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
-    public void encoderDriveImu(double speed, double leftInches, double rightInches, float targetAngle){
+    public void encoderDriveImu(double speed, double leftInches, double rightInches, float targetAngle, String direction){
         // this creates the variables that will be calculated
         int newLeftFrontTarget = 0;
         int newRightFrontTarget = 0;
@@ -243,27 +243,53 @@ public class AutonomousV1 extends LinearOpMode {
         BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         //this gets the absolute speed and converts it into power for the motor.
-        while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() < newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() < newRightBackTarget){
-            //Set IMU angle orientation
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            if (angles.firstAngle < targetAngle){
-                FR.setPower(Math.abs(speed) + .05);
-                FL.setPower(Math.abs(speed) - .05);
-                BR.setPower(Math.abs(speed) + .05);
-                BL.setPower(Math.abs(speed) - .05);
-            } else if (angles.firstAngle > targetAngle){
-                FR.setPower(Math.abs(speed) - .05);
-                FL.setPower(Math.abs(speed) + .05);
-                BR.setPower(Math.abs(speed) - .05);
-                BL.setPower(Math.abs(speed) + .05);
-            } else {
-                //this gets the absolute speed and converts it into power for the motor.
-                FR.setPower(Math.abs(speed));
-                FL.setPower(Math.abs(speed));
-                BR.setPower(Math.abs(speed));
-                BL.setPower(Math.abs(speed));
+
+        if (direction.equals("forward")) {
+            while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() < newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() < newRightBackTarget){
+                //Set IMU angle orientation
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                if (angles.firstAngle < targetAngle){
+                    FR.setPower(Math.abs(speed) + .05);
+                    FL.setPower(Math.abs(speed) - .05);
+                    BR.setPower(Math.abs(speed) + .05);
+                    BL.setPower(Math.abs(speed) - .05);
+                } else if (angles.firstAngle > targetAngle){
+                    FR.setPower(Math.abs(speed) - .05);
+                    FL.setPower(Math.abs(speed) + .05);
+                    BR.setPower(Math.abs(speed) - .05);
+                    BL.setPower(Math.abs(speed) + .05);
+                } else {
+                    //this gets the absolute speed and converts it into power for the motor.
+                    FR.setPower(Math.abs(speed));
+                    FL.setPower(Math.abs(speed));
+                    BR.setPower(Math.abs(speed));
+                    BL.setPower(Math.abs(speed));
+                }
+            }
+        } else {
+            while (FL.getCurrentPosition() > newLeftFrontTarget && FR.getCurrentPosition() > newRightFrontTarget && BL.getCurrentPosition() > newLeftBackTarget && BR.getCurrentPosition() > newRightBackTarget){
+                //Set IMU angle orientation
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                if (angles.firstAngle < targetAngle){
+                    FR.setPower(Math.abs(speed) + .05);
+                    FL.setPower(Math.abs(speed) - .05);
+                    BR.setPower(Math.abs(speed) + .05);
+                    BL.setPower(Math.abs(speed) - .05);
+                } else if (angles.firstAngle > targetAngle){
+                    FR.setPower(Math.abs(speed) - .05);
+                    FL.setPower(Math.abs(speed) + .05);
+                    BR.setPower(Math.abs(speed) - .05);
+                    BL.setPower(Math.abs(speed) + .05);
+                } else {
+                    //this gets the absolute speed and converts it into power for the motor.
+                    FR.setPower(Math.abs(speed));
+                    FL.setPower(Math.abs(speed));
+                    BR.setPower(Math.abs(speed));
+                    BL.setPower(Math.abs(speed));
+                }
             }
         }
+
 
         while (FR.isBusy() || FL.isBusy() || BR.isBusy() || BL.isBusy()) {
             telemetry.addData("Path", "Running");
@@ -431,25 +457,25 @@ public class AutonomousV1 extends LinearOpMode {
 // Based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
-        encoderDriveImu(1, 78,78, 0);
+        encoderDriveImu(.75, 78,78, 0, "forward");
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
         strafeDrive(.75,-15,-15);
         //Move robot to shooter zone
-        encoderDrive(.75,-19,-19);
+        encoderDriveImu(.75,-19,-19, 0, "backward" );
         //Power on shooter motor
-        powerOnShooterMotor();
+        //powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.75,-49,49);
-        shootingRings();
-
-        sleep(20000);
+        encoderDrive(.75,-48,48);
+        //Shoot three rings
+        //shootingRings();
+        sleep(30000);
     }
     //Steps for single ring
     public void targetZoneB(){
         //Move forward towards box B
-        encoderDriveImu(1, 103,103, 0);
+        encoderDriveImu(1, 103,103, 0, "forward");
         //Strafe left into box B (left and right numbers are negative)
         strafeDrive(.75,-30,-30);
         dropWobbleGoal();
@@ -464,7 +490,7 @@ public class AutonomousV1 extends LinearOpMode {
     //Steps for four rings.
     public void targetZoneC(){
         //Move forward to box C
-        encoderDriveImu(1, 123,123, 0);
+        encoderDriveImu(1, 123,123, 0, "forward");
         dropWobbleGoal();
         strafeDrive(.75,-14,-14);
         encoderDrive(.75,-12,-12);
