@@ -451,27 +451,27 @@ public class AutonomousV1 extends LinearOpMode {
         //Move forward towards box B
         encoderDriveImu(1, 103,103, 0);
         //Strafe left into box B (left and right numbers are negative)
-        strafeDrive(1,-30,-30);
+        strafeDrive(.75,-30,-30);
         dropWobbleGoal();
-        encoderDrive(1,-35,-35);
+        encoderDrive(.75,-35,-35);
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(1,-48.5,48.5);
+        encoderDrive(.75,-48.5,48.5);
         shootingRings();
         sleep(20000);
     }
-    //Steps for four rings
+    //Steps for four rings.
     public void targetZoneC(){
         //Move forward to box C
         encoderDriveImu(1, 123,123, 0);
         dropWobbleGoal();
-        strafeDrive(1,-14,-14);
-        encoderDrive(1,-12,-12);
+        strafeDrive(.75,-14,-14);
+        encoderDrive(.75,-12,-12);
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(1,-49,49);
+        encoderDrive(.75,-49,49);
         shootingRings();
         sleep(20000);
     }
