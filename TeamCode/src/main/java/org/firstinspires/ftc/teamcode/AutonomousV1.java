@@ -483,15 +483,15 @@ public class AutonomousV1 extends LinearOpMode {
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.75,-48,48);
+        encoderDriveImu(.75,-48,48);
         //Shoot three rings
         shootingRings();
         sleep(30000);
-        encoderDrive(1,18,-18);
+        encoderDriveImu(1,18,-18);
         strafeDrive(1,-2,-29);
-        encoderDrive(1,-51,-51);
+        encoderDriveImu(1,-51,-51);
         pickUpWobbleGoal();
-        encoderDrive(1,52,52);
+        encoderDriveImu(1,52,52);
         strafeDrive(1,31,31);
         dropWobbleGoal();
     }
@@ -508,18 +508,18 @@ public class AutonomousV1 extends LinearOpMode {
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.75,-48.5,48.5);
+        encoderDriveImu(.75,-48.5,48.5);
         //Shoot three rings
         shootingRings();
         sleep(20000);
-        encoderDrive(1,18,-18);
+        encoderDriveImu(1,18,-18);
         strafeDrive(1,-2,-29);
-        encoderDrive(1,-51,-51);
+        encoderDriveImu(1,-51,-51);
         pickUpWobbleGoal();
-        encoderDrive(1,78,78);
+        encoderDriveImu(1,78,78);
         strafeDrive(1,13,13);
         dropWobbleGoal();
-        encoderDrive(1,-23,-23);
+        encoderDriveImu(1,-23,-23);
     }
     //Steps for four rings.
     public void targetZoneC(){
@@ -530,22 +530,22 @@ public class AutonomousV1 extends LinearOpMode {
         //Strafe robot it the left
         strafeDrive(.75,-14,-14);
         //Move robot to shooter zone
-        encoderDrive(.75,-12,-12);
+        encoderDriveImu(.75,-12,-12);
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.75,-49,49);
+        encoderDriveImu(.75,-49,49);
         //Shoot three rings
         shootingRings();
         sleep(20000);
-        encoderDrive(1,18,-18);
+        encoderDriveImu(1,18,-18);
         strafeDrive(1,-2,-29);
-        encoderDrive(1,-51,-51);
+        encoderDriveImu(1,-51,-51);
         pickUpWobbleGoal();
-        encoderDrive(1,100,100);
+        encoderDriveImu(1,100,100);
         strafeDrive(1,31,31);
         dropWobbleGoal();
-        encoderDrive(1,-43,-43);
+        encoderDriveImu(1,-43,-43);
     }
 
 }
