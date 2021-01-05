@@ -453,6 +453,22 @@ public class AutonomousV1 extends LinearOpMode {
         wobbleArmMotor.setPower(0);
 
     }
+    public void pickUpWobbleGoal() {
+        wobbleArmMotor.setTargetPosition(210);
+        wobbleArmMotor.setPower(0.5);
+        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(500);
+        wobbleArmMotor.setPower(0);
+        sleep(250);
+        wobbleArmServo.setPosition(-0.35);
+        sleep(250);
+        wobbleArmMotor.setTargetPosition(50);
+        wobbleArmMotor.setPower(0.4);
+        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(500);
+        wobbleArmMotor.setPower(0);
+
+    }
 
 // Based on the rings, driving to respective box
     public void targetZoneA(){
@@ -471,6 +487,13 @@ public class AutonomousV1 extends LinearOpMode {
         //Shoot three rings
         shootingRings();
         sleep(30000);
+        encoderDrive(1,18,-18);
+        strafeDrive(1,-2,-29);
+        encoderDrive(1,-51,-51);
+        pickUpWobbleGoal();
+        encoderDrive(1,52,52);
+        strafeDrive(1,31,31);
+        dropWobbleGoal();
     }
     //Steps for single ring
     public void targetZoneB(){
@@ -489,6 +512,14 @@ public class AutonomousV1 extends LinearOpMode {
         //Shoot three rings
         shootingRings();
         sleep(20000);
+        encoderDrive(1,18,-18);
+        strafeDrive(1,-2,-29);
+        encoderDrive(1,-51,-51);
+        pickUpWobbleGoal();
+        encoderDrive(1,78,78);
+        strafeDrive(1,13,13);
+        dropWobbleGoal();
+        encoderDrive(1,-23,-23);
     }
     //Steps for four rings.
     public void targetZoneC(){
@@ -507,6 +538,14 @@ public class AutonomousV1 extends LinearOpMode {
         //Shoot three rings
         shootingRings();
         sleep(20000);
+        encoderDrive(1,18,-18);
+        strafeDrive(1,-2,-29);
+        encoderDrive(1,-51,-51);
+        pickUpWobbleGoal();
+        encoderDrive(1,100,100);
+        strafeDrive(1,31,31);
+        dropWobbleGoal();
+        encoderDrive(1,-43,-43);
     }
 
 }
