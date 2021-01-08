@@ -57,6 +57,7 @@ public class AutonomousV1 extends LinearOpMode {
     BNO055IMU imu;
     Orientation angles;
 
+    //int numberOfRings = 3;
 
     final double TICKS_PER_REV = 537.6;    // eg: goBILDA Motor Encoder.
     final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
@@ -427,12 +428,12 @@ public class AutonomousV1 extends LinearOpMode {
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void shooterServoRings() {
-        for(int i = 3; i > 0; i = i - 1) {
+    public void shooterServoRings(int numberOfRings) {
+        for(int i = numberOfRings; i > 0; i = i - 1) {
             shooterServo.setPosition(0.35);
-            sleep(600);
+            sleep(400);
             shooterServo.setPosition(0);
-            sleep(600);
+            sleep(400);
         }
     }
 
@@ -440,8 +441,13 @@ public class AutonomousV1 extends LinearOpMode {
         shooterMotor.setPower(-1);
     }
 
-    public void shootingRings() {
-        shooterServoRings();
+    public void shootingThreeRings() {
+        shooterServoRings(3);
+        shooterMotor.setPower(0);
+    }
+
+    public void shootingOneRing() {
+        shooterServoRings(1);
         shooterMotor.setPower(0);
     }
 
@@ -500,7 +506,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face ring goal
         encoderDrive(.5,-48,48);
         //Shoot three rings
-        shootingRings();
+        shootingThreeRings();
         //Turn robot to face second wobble goal
         encoderDrive(.5,48,-48);
         //Strafe robot to the left
@@ -537,7 +543,20 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face ring goal
         encoderDrive(.5,-48,48);
         //Shoot three rings
-        shootingRings();
+        shootingThreeRings();
+
+        //Power on intake motor
+
+        //Move robot forward 20" to intake single ring
+
+        //power off intake motor
+
+        //power on shooter motor
+
+        //Move robot backwards 20"
+
+        //Shoot one ring with shootingOneRing()
+
         //Turn robot to face second wobble goal
         encoderDrive(.5,47,-47);
         //Strafe robot to the left
@@ -572,7 +591,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face ring goal
         encoderDrive(.75,-49,49);
         //Shoot three rings
-        shootingRings();
+        shootingThreeRings();
         sleep(20000);
         encoderDrive(1,18,-18);
         strafeDrive(1,-2,-29);
