@@ -450,7 +450,7 @@ public class AutonomousV1 extends LinearOpMode {
         wobbleArmMotor.setTargetPosition(210);
         wobbleArmMotor.setPower(0.4);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sleep(500);
+        sleep(750);
         wobbleArmMotor.setPower(0);
         sleep(500);
         wobbleArmServo.setPosition(0.35);
@@ -521,7 +521,7 @@ public class AutonomousV1 extends LinearOpMode {
     //Steps for single ring
     public void targetZoneB(){
         //Move forward towards box B
-        encoderDriveImu(.75, 104,104, 0, "forward");
+        encoderDriveImu(.75, 98,98, 0, "forward");
         //Strafe left into box B (left and right numbers are negative)
         strafeDrive(.5,-28,-28);
         //Place wobble goal in square
@@ -529,30 +529,32 @@ public class AutonomousV1 extends LinearOpMode {
         //Strafe slightly towards left
         strafeDrive(.5,-10,-10);
         //Move robot towards shooter zone
-        encoderDriveImu(.75,-45,-45, 0, "backward");
+        encoderDriveImu(.5,-38,-38, 0, "backward");
         //Strafe right to shooter zone
         strafeDrive(.5,23,23);
         //Power on shooter motor
-       // powerOnShooterMotor();
+        powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.75,-48.5,48);
+        encoderDrive(.5,-48,48);
         //Shoot three rings
-       /* shootingRings();
+        shootingRings();
         //Turn robot to face second wobble goal
-        encoderDrive(.75,48,-48);
+        encoderDrive(.5,47,-47);
         //Strafe robot to the left
         strafeDrive(.5,-29,-29);
         //Move forward to second wobble goal
         encoderDriveImu(.75,-42,-42,0,"backward");
         //Pick up the second wobble goal
         pickUpWobbleGoal();
-        //Move backwards towards target zone A
-        encoderDriveImu(.75,78,78, 0, "forward");
-        //Strafe robot right towards target zone A
-        strafeDrive(.5,13,13);
+        //Move backwards towards target zone B
+        encoderDriveImu(.75,84,84, 0, "forward");
+        //Strafe robot right towards target zone B
+        strafeDrive(.5,10,10);
         //Drop wobble goal in target zone B
         dropWobbleGoal();
-        retractWobbleGoalArm(); */
+        retractWobbleGoalArm();
+        //Move backwards  to shooting line
+        encoderDriveImu(.75,-24,-24,0,"backward");
         sleep(30000);
     }
     //Steps for four rings.
