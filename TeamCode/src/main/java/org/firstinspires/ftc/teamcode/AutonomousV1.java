@@ -155,7 +155,7 @@ public class AutonomousV1 extends LinearOpMode {
                             // empty list.  no objects recognized.
                             telemetry.addData("TFOD", "No items detected.");
                             telemetry.addData("Target Zone", "A");
-                            targetZoneA();
+                            targetZoneB();
                         } else {
                             // list is not empty.
                             // step through the list of recognitions and display boundary info.
@@ -430,15 +430,15 @@ public class AutonomousV1 extends LinearOpMode {
 
     public void shooterServoRings(int numberOfRings) {
         for(int i = numberOfRings; i > 0; i = i - 1) {
-            shooterServo.setPosition(0.35);
-            sleep(400);
+            shooterServo.setPosition(0.28);
+            sleep(500);
             shooterServo.setPosition(0);
-            sleep(400);
+            sleep(500);
         }
     }
 
     public void powerOnShooterMotor() {
-        shooterMotor.setPower(-1);
+        shooterMotor.setPower(-.75);
     }
 
     public void shootingThreeRings() {
@@ -498,13 +498,13 @@ public class AutonomousV1 extends LinearOpMode {
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        strafeDrive(.5,-19,-19);
+        strafeDrive(.5,-17.5,-17.5);
         //Move robot to shooter zone
-        encoderDriveImu(.5,-23,-23, 0, "backward" );
+        encoderDriveImu(.5,-20,-20, 0, "backward" );
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.5,-48,48);
+        encoderDrive(.5,-47.5,47.5);
         //Shoot three rings
         shootingThreeRings();
         //Turn robot to face second wobble goal

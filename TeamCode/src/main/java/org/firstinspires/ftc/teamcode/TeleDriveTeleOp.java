@@ -405,7 +405,7 @@ public class TeleDriveTeleOp extends LinearOpMode {
           intakeMotor.setPower(gamepad1.right_trigger);
 
           if(gamepad2.b) {
-              shooterMotor.setPower(-1);
+              shooterMotor.setPower(-.75);
           }
           if(gamepad2.y) {
               shooterMotor.setPower(0);
@@ -427,7 +427,7 @@ public class TeleDriveTeleOp extends LinearOpMode {
           }
 
           if(gamepad2.x) {
-              shooterServo.setPosition(0.30);
+              shooterServo.setPosition(0.28);
           } else {
               shooterServo.setPosition(0);
           }
