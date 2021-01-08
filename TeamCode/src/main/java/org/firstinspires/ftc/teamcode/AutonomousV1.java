@@ -466,7 +466,7 @@ public class AutonomousV1 extends LinearOpMode {
         wobbleArmServo.setPosition(0);
     }
 
-    //Set wobble goal arm to open up and set wobble arm servo to open
+    //Set wobble goal arm to open up and set wobble arm servo to open.
     public void openWobbleGoalArm() {
         wobbleArmMotor.setTargetPosition(210);
         wobbleArmMotor.setPower(0.5);
