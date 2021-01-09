@@ -57,8 +57,6 @@ public class AutonomousV1 extends LinearOpMode {
     BNO055IMU imu;
     Orientation angles;
 
-    //int numberOfRings = 3;
-
     final double TICKS_PER_REV = 537.6;    // eg: goBILDA Motor Encoder.
     final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
     final double WHEEL_DIAMETER_INCHES = 3.779528;     // For figuring circumference
@@ -155,7 +153,8 @@ public class AutonomousV1 extends LinearOpMode {
                             // empty list.  no objects recognized.
                             telemetry.addData("TFOD", "No items detected.");
                             telemetry.addData("Target Zone", "A");
-                            targetZoneC();
+                            targetZoneA();
+
                         } else {
                             // list is not empty.
                             // step through the list of recognitions and display boundary info.
@@ -431,9 +430,9 @@ public class AutonomousV1 extends LinearOpMode {
     public void shooterServoRings(int numberOfRings) {
         for(int i = numberOfRings; i > 0; i = i - 1) {
             shooterServo.setPosition(0.28);
-            sleep(500);
+            sleep(400);
             shooterServo.setPosition(0);
-            sleep(500);
+            sleep(400);
         }
     }
 
@@ -442,7 +441,7 @@ public class AutonomousV1 extends LinearOpMode {
     }
 
     public void shootingThreeRings() {
-        shooterServoRings(3);
+        shooterServoRings(4);
         shooterMotor.setPower(0);
     }
 
@@ -459,7 +458,7 @@ public class AutonomousV1 extends LinearOpMode {
         sleep(750);
         wobbleArmMotor.setPower(0);
         sleep(500);
-        wobbleArmServo.setPosition(0.35);
+        wobbleArmServo.setPosition(0.45);
     }
 
     //Retract wobble goal arm
@@ -510,7 +509,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal
         encoderDrive(.5,48,-48);
         //Strafe robot to the left
-        strafeDrive(.5,-30,-30);
+        strafeDrive(.5,-29,-29);
         //Move forward to second wobble goal
         encoderDriveImu(.5,-42,-42,0,"backward");
         //Pick up the second wobble goal
@@ -585,7 +584,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Strafe robot it the left
         strafeDrive(.5,-14,-14);
         //Move robot to shooter zone
-        encoderDriveImu(.5,-63,-63 ,0,"backwards");
+        encoderDriveImu(.5,-62,-62 ,0,"backwards");
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
@@ -596,13 +595,14 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal
         encoderDrive(.75,47,-47);
         //Strafe robot to the left
-        strafeDrive(.5,-29,-29);
+        strafeDrive(.5,-31,-31);
         //Move forward to second wobble goal
         encoderDriveImu(.75,-42,-42,0,"backward");
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone C
-        encoderDriveImu(.75,105,105, 0, "forward");
+        encoderDriveImu(.75,106,106
+                , 0, "forward");
         //Strafe robot right towards target zone C
         strafeDrive(.5,35,35);
         //Drop wobble goal in target zone C
