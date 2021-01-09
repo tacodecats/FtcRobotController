@@ -155,7 +155,7 @@ public class AutonomousV1 extends LinearOpMode {
                             // empty list.  no objects recognized.
                             telemetry.addData("TFOD", "No items detected.");
                             telemetry.addData("Target Zone", "A");
-                            targetZoneB();
+                            targetZoneC();
                         } else {
                             // list is not empty.
                             // step through the list of recognitions and display boundary info.
@@ -510,7 +510,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal
         encoderDrive(.5,48,-48);
         //Strafe robot to the left
-        strafeDrive(.5,-29,-29);
+        strafeDrive(.5,-30,-30);
         //Move forward to second wobble goal
         encoderDriveImu(.5,-42,-42,0,"backward");
         //Pick up the second wobble goal
@@ -579,28 +579,38 @@ public class AutonomousV1 extends LinearOpMode {
     //Steps for four rings.
     public void targetZoneC(){
         //Move forward to box C
-        encoderDriveImu(1, 123,123, 0, "forward");
+        encoderDriveImu(.75, 122,122, 0, "forward");
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        strafeDrive(.75,-14,-14);
+        strafeDrive(.5,-14,-14);
         //Move robot to shooter zone
-        encoderDrive(.75,-12,-12);
+        encoderDriveImu(.5,-63,-63 ,0,"backwards");
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.75,-49,49);
+        encoderDrive(.75,-48,48);
         //Shoot three rings
+        sleep(500);
         shootingThreeRings();
-        sleep(20000);
-        encoderDrive(1,18,-18);
-        strafeDrive(1,-2,-29);
-        encoderDrive(1,-51,-51);
+        //Turn robot to face second wobble goal
+        encoderDrive(.75,47,-47);
+        //Strafe robot to the left
+        strafeDrive(.5,-29,-29);
+        //Move forward to second wobble goal
+        encoderDriveImu(.75,-42,-42,0,"backward");
+        //Pick up the second wobble goal
         pickUpWobbleGoal();
-        encoderDrive(1,100,100);
-        strafeDrive(1,31,31);
+        //Move backwards towards target zone C
+        encoderDriveImu(.75,105,105, 0, "forward");
+        //Strafe robot right towards target zone C
+        strafeDrive(.5,35,35);
+        //Drop wobble goal in target zone C
         dropWobbleGoal();
-        encoderDrive(1,-43,-43);
+        retractWobbleGoalArm();
+        //Move backwards  to shooting line
+        encoderDriveImu(.75,-46,-46,0,"backward");
+        sleep(30000);
     }
 
 }
