@@ -57,7 +57,6 @@ public class AutonomousV1 extends LinearOpMode {
     BNO055IMU imu;
     Orientation angles;
 
-
     final double TICKS_PER_REV = 537.6;    // eg: goBILDA Motor Encoder.
     final double DRIVE_GEAR_REDUCTION = 1;     // This is < 1.0 if geared UP
     final double WHEEL_DIAMETER_INCHES = 3.779528;     // For figuring circumference
@@ -155,6 +154,7 @@ public class AutonomousV1 extends LinearOpMode {
                             telemetry.addData("TFOD", "No items detected.");
                             telemetry.addData("Target Zone", "A");
                             targetZoneA();
+
                         } else {
                             // list is not empty.
                             // step through the list of recognitions and display boundary info.
@@ -271,15 +271,15 @@ public class AutonomousV1 extends LinearOpMode {
                 //Set IMU angle orientation
                 angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 if (angles.firstAngle < targetAngle){
-                    FR.setPower(Math.abs(speed) + .05);
-                    FL.setPower(Math.abs(speed) - .05);
-                    BR.setPower(Math.abs(speed) + .05);
-                    BL.setPower(Math.abs(speed) - .05);
-                } else if (angles.firstAngle > targetAngle){
                     FR.setPower(Math.abs(speed) - .05);
                     FL.setPower(Math.abs(speed) + .05);
                     BR.setPower(Math.abs(speed) - .05);
                     BL.setPower(Math.abs(speed) + .05);
+                } else if (angles.firstAngle > targetAngle){
+                    FR.setPower(Math.abs(speed) + .05);
+                    FL.setPower(Math.abs(speed) - .05);
+                    BR.setPower(Math.abs(speed) + .05);
+                    BL.setPower(Math.abs(speed) - .05);
                 } else {
                     //this gets the absolute speed and converts it into power for the motor.
                     FR.setPower(Math.abs(speed));
@@ -291,8 +291,11 @@ public class AutonomousV1 extends LinearOpMode {
         }
 
 
-        while (FR.isBusy() || FL.isBusy() || BR.isBusy() || BL.isBusy()) {
-            telemetry.addData("Path", "Running");
+        while (FR.isBusy() && FL.isBusy() && BR.isBusy() && BL.isBusy()) {
+            telemetry.addData("FL:", FL.getCurrentPosition()  );
+            telemetry.addData("FR:", FR.getCurrentPosition()  );
+            telemetry.addData("BL:", BL.getCurrentPosition()  );
+            telemetry.addData("BR:", BR.getCurrentPosition()  );
             telemetry.update();
         }
         telemetry.addData("Path", "Complete");
@@ -343,8 +346,11 @@ public class AutonomousV1 extends LinearOpMode {
         BR.setPower(Math.abs(speed));
         BL.setPower(Math.abs(speed));
 
-        while (FR.isBusy() || FL.isBusy() || BR.isBusy() || BL.isBusy()) {
-            telemetry.addData("Path", "Running");
+        while (FR.isBusy() && FL.isBusy() && BR.isBusy() && BL.isBusy()) {
+            telemetry.addData("FL:", FL.getCurrentPosition()  );
+            telemetry.addData("FR:", FR.getCurrentPosition()  );
+            telemetry.addData("BL:", BL.getCurrentPosition()  );
+            telemetry.addData("BR:", BR.getCurrentPosition()  );
             telemetry.update();
         }
         telemetry.addData("Path", "Complete");
@@ -395,8 +401,11 @@ public class AutonomousV1 extends LinearOpMode {
         BR.setPower(Math.abs(speed));
         BL.setPower(Math.abs(speed));
 
-        while (FR.isBusy() || FL.isBusy() || BR.isBusy() || BL.isBusy()) {
-            telemetry.addData("Path", "Running");
+        while (FR.isBusy() && FL.isBusy() && BR.isBusy() && BL.isBusy()) {
+            telemetry.addData("FL:", FL.getCurrentPosition()  );
+            telemetry.addData("FR:", FR.getCurrentPosition()  );
+            telemetry.addData("BL:", BL.getCurrentPosition()  );
+            telemetry.addData("BR:", BR.getCurrentPosition()  );
             telemetry.update();
         }
         telemetry.addData("Path", "Complete");
@@ -418,26 +427,52 @@ public class AutonomousV1 extends LinearOpMode {
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void shooterServoRings() {
-        for(int i = 3; i > 0; i = i - 1) {
-            shooterServo.setPosition(0.35);
-            sleep(600);
+    public void shooterServoRings(int numberOfRings) {
+        for(int i = numberOfRings; i > 0; i = i - 1) {
+            shooterServo.setPosition(0.28);
+            sleep(400);
             shooterServo.setPosition(0);
-            sleep(600);
+            sleep(400);
         }
     }
 
     public void powerOnShooterMotor() {
-        shooterMotor.setPower(-1);
+        shooterMotor.setPower(-.75);
     }
 
-    public void shootingRings() {
-        shooterServoRings();
+    public void shootingThreeRings() {
+        shooterServoRings(4);
+        shooterMotor.setPower(0);
+    }
+
+    public void shootingOneRing() {
+        shooterServoRings(1);
         shooterMotor.setPower(0);
     }
 
     //Drop wobble goal into place.
     public void dropWobbleGoal() {
+        wobbleArmMotor.setTargetPosition(210);
+        wobbleArmMotor.setPower(0.4);
+        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(750);
+        wobbleArmMotor.setPower(0);
+        sleep(500);
+        wobbleArmServo.setPosition(0.45);
+    }
+
+    //Retract wobble goal arm
+    public void retractWobbleGoalArm() {
+        wobbleArmMotor.setTargetPosition(40);
+        wobbleArmMotor.setPower(0.3);
+        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(500);
+        wobbleArmMotor.setPower(0);
+        wobbleArmServo.setPosition(0);
+    }
+
+    //Set wobble goal arm to open up and set wobble arm servo to open.
+    public void openWobbleGoalArm() {
         wobbleArmMotor.setTargetPosition(210);
         wobbleArmMotor.setPower(0.5);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -445,29 +480,14 @@ public class AutonomousV1 extends LinearOpMode {
         wobbleArmMotor.setPower(0);
         sleep(250);
         wobbleArmServo.setPosition(0.35);
-        sleep(250);
-        wobbleArmMotor.setTargetPosition(50);
-        wobbleArmMotor.setPower(0.4);
-        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sleep(500);
-        wobbleArmMotor.setPower(0);
-
     }
-    public void pickUpWobbleGoal() {
-        wobbleArmMotor.setTargetPosition(210);
-        wobbleArmMotor.setPower(0.5);
-        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sleep(500);
-        wobbleArmMotor.setPower(0);
-        sleep(250);
-        wobbleArmServo.setPosition(-0.35);
-        sleep(250);
-        wobbleArmMotor.setTargetPosition(50);
-        wobbleArmMotor.setPower(0.4);
-        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sleep(500);
-        wobbleArmMotor.setPower(0);
 
+    public void pickUpWobbleGoal() {
+        wobbleArmServo.setPosition(0);
+        sleep(500);
+        wobbleArmMotor.setTargetPosition(190);
+        wobbleArmMotor.setPower(.75);
+        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void intakeOn() {
@@ -482,79 +502,124 @@ public class AutonomousV1 extends LinearOpMode {
     // Based on the rings, driving to respective box
     public void targetZoneA(){
         //Move forward to box A
-        encoderDriveImu(.75, 78,78, 0, "forward");
+        encoderDriveImu(.5, 78,78, 0, "forward");
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        strafeDrive(.75,-15,-15);
+        strafeDrive(.5,-17.5,-17.5);
         //Move robot to shooter zone
-        encoderDriveImu(.75,-19,-19, 0, "backward" );
+        encoderDriveImu(.5,-20,-20, 0, "backward" );
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDriveImu(.75,-48,48);
+        encoderDrive(.5,-47.5,47.5);
         //Shoot three rings
-        shootingRings();
-        sleep(30000);
-        encoderDriveImu(1,18,-18);
-        strafeDrive(1,-2,-29);
-        encoderDriveImu(1,-51,-51);
+        shootingThreeRings();
+        //Turn robot to face second wobble goal
+        encoderDrive(.5,48,-48);
+        //Strafe robot to the left
+        strafeDrive(.5,-29,-29);
+        //Move forward to second wobble goal
+        encoderDriveImu(.5,-42,-42,0,"backward");
+        //Pick up the second wobble goal
         pickUpWobbleGoal();
-        encoderDriveImu(1,52,52);
-        strafeDrive(1,31,31);
+        //Move backwards towards target zone A
+        encoderDriveImu(.5,60,60, 0, "forward");
+        //Strafe robot right towards target zone A
+        strafeDrive(.5,34,34);
+        //Drop wobble goal in target zone A
         dropWobbleGoal();
+        retractWobbleGoalArm();
+        sleep(30000);
     }
     //Steps for single ring
     public void targetZoneB(){
         //Move forward towards box B
-        encoderDriveImu(.75, 103,103, 0, "forward");
+        encoderDriveImu(.75, 98,98, 0, "forward");
         //Strafe left into box B (left and right numbers are negative)
-        strafeDrive(.75,-30,-30);
+        strafeDrive(.5,-28,-28);
         //Place wobble goal in square
         dropWobbleGoal();
-        //Move robot to shooter zone
-        encoderDriveImu(.75,-35,-35, 0, "backward");
+        //Strafe slightly towards left
+        strafeDrive(.5,-10,-10);
+        //Move robot towards shooter zone
+        encoderDriveImu(.5,-38,-38, 0, "backward");
+        //Strafe right to shooter zone
+        strafeDrive(.5,23,23);
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDriveImu(.75,-48.5,48.5);
+        encoderDrive(.5,-48,48);
         //Shoot three rings
-        shootingRings();
-        sleep(20000);
-        encoderDriveImu(1,18,-18);
-        strafeDrive(1,-2,-29);
-        encoderDriveImu(1,-51,-51);
+        shootingThreeRings();
+
+        //Power on intake motor
+
+        //Move robot forward 20" to intake single ring
+
+        //power off intake motor
+
+        //power on shooter motor
+
+        //Move robot backwards 20"
+
+        //Shoot one ring with shootingOneRing()
+
+        //Turn robot to face second wobble goal
+        encoderDrive(.5,47,-47);
+        //Strafe robot to the left
+        strafeDrive(.5,-29,-29);
+        //Move forward to second wobble goal
+        encoderDriveImu(.75,-42,-42,0,"backward");
+        //Pick up the second wobble goal
         pickUpWobbleGoal();
-        encoderDriveImu(1,78,78);
-        strafeDrive(1,13,13);
+        //Move backwards towards target zone B
+        encoderDriveImu(.75,84,84, 0, "forward");
+        //Strafe robot right towards target zone B
+        strafeDrive(.5,10,10);
+        //Drop wobble goal in target zone B
         dropWobbleGoal();
-        encoderDriveImu(1,-23,-23);
+        retractWobbleGoalArm();
+        //Move backwards  to shooting line
+        encoderDriveImu(.75,-24,-24,0,"backward");
+        sleep(30000);
     }
     //Steps for four rings.
     public void targetZoneC(){
         //Move forward to box C
-        encoderDriveImu(1, 123,123, 0, "forward");
+        encoderDriveImu(.75, 122,122, 0, "forward");
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        strafeDrive(.75,-14,-14);
+        strafeDrive(.5,-14,-14);
         //Move robot to shooter zone
-        encoderDriveImu(.75,-12,-12);
+        encoderDriveImu(.5,-62,-62 ,0,"backwards");
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDriveImu(.75,-49,49);
+        encoderDrive(.75,-48,48);
         //Shoot three rings
-        shootingRings();
-        sleep(20000);
-        encoderDriveImu(1,18,-18);
-        strafeDrive(1,-2,-29);
-        encoderDriveImu(1,-51,-51);
+        sleep(500);
+        shootingThreeRings();
+        //Turn robot to face second wobble goal
+        encoderDrive(.75,47,-47);
+        //Strafe robot to the left
+        strafeDrive(.5,-31,-31);
+        //Move forward to second wobble goal
+        encoderDriveImu(.75,-42,-42,0,"backward");
+        //Pick up the second wobble goal
         pickUpWobbleGoal();
-        encoderDriveImu(1,100,100);
-        strafeDrive(1,31,31);
+        //Move backwards towards target zone C
+        encoderDriveImu(.75,106,106
+                , 0, "forward");
+        //Strafe robot right towards target zone C
+        strafeDrive(.5,35,35);
+        //Drop wobble goal in target zone C
         dropWobbleGoal();
-        encoderDriveImu(1,-43,-43);
+        retractWobbleGoalArm();
+        //Move backwards  to shooting line
+        encoderDriveImu(.75,-46,-46,0,"backward");
+        sleep(30000);
     }
 
 }
