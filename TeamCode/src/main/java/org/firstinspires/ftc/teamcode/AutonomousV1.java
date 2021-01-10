@@ -477,7 +477,7 @@ public class AutonomousV1 extends LinearOpMode {
     public void intakeOff() {
         intakeMotor.setPower(0);
     }
-
+//intake functions for power
 
     // Based on the rings, driving to respective box
     public void targetZoneA(){
