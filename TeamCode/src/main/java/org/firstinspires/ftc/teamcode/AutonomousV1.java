@@ -490,14 +490,14 @@ public class AutonomousV1 extends LinearOpMode {
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    //Power on intake motor
     public void intakeOn() {
-        intakeMotor.setPower(double power);
+        intakeMotor.setPower(-1);
     }
-
+    //Power off intake motor
     public void intakeOff() {
         intakeMotor.setPower(0);
     }
-//intake functions for power
 
     // Based on the rings, driving to respective box
     public void targetZoneA(){
@@ -552,19 +552,18 @@ public class AutonomousV1 extends LinearOpMode {
         encoderDrive(.5,-48,48);
         //Shoot three rings
         shootingThreeRings();
-
         //Power on intake motor
-
+        intakeOn();
         //Move robot forward 20" to intake single ring
-
+        encoderDriveImu(.75,20,20,0,"forward");
         //power off intake motor
-
+        intakeOff();
         //power on shooter motor
-
+        powerOnShooterMotor();
         //Move robot backwards 20"
-
+        encoderDriveImu(.75,-20,-20,0,"backward");
         //Shoot one ring with shootingOneRing()
-
+        shootingOneRing();
         //Turn robot to face second wobble goal
         encoderDrive(.5,47,-47);
         //Strafe robot to the left
@@ -610,8 +609,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone C
-        encoderDriveImu(.75,106,106
-                , 0, "forward");
+        encoderDriveImu(.75,106,106, 0, "forward");
         //Strafe robot right towards target zone C
         strafeDrive(.5,35,35);
         //Drop wobble goal in target zone C
