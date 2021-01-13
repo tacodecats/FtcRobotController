@@ -359,9 +359,6 @@ public class TeleDriveTeleOp extends LinearOpMode {
         // Reverse shooter motor so it goes in the correct direction
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        // Reverse wobble arm motor
-       // wobbleArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
         // Set wobble arm motor encoder to 0.
         wobbleArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -415,9 +412,16 @@ public class TeleDriveTeleOp extends LinearOpMode {
               wobbleArmMotor.setTargetPosition(210);
               wobbleArmMotor.setPower(0.3);
               wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-              sleep(750);
+              sleep(500);
               wobbleArmMotor.setPower(0);
           }
+
+          if (gamepad2.dpad_up) {
+              wobbleArmMotor.setTargetPosition(170);
+              wobbleArmMotor.setPower(1);
+              wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+          }
+
           if (gamepad2.dpad_left) {
               wobbleArmMotor.setTargetPosition(90);
               wobbleArmMotor.setPower(0.3);
@@ -431,10 +435,10 @@ public class TeleDriveTeleOp extends LinearOpMode {
           } else {
               shooterServo.setPosition(0);
           }
-          if (gamepad2.dpad_up) {
+          if (gamepad2.right_bumper) {
               wobbleArmServo.setPosition(0.35);
           }
-          if (gamepad2.dpad_down) {
+          if (gamepad2.left_bumper) {
               wobbleArmServo.setPosition(0);
           }
       }

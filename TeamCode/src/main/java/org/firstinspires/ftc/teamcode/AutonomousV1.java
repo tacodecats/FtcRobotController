@@ -492,7 +492,7 @@ public class AutonomousV1 extends LinearOpMode {
 
     //Power on intake motor
     public void intakeOn() {
-        intakeMotor.setPower(-1);
+        intakeMotor.setPower(.75);
     }
     //Power off intake motor
     public void intakeOff() {
