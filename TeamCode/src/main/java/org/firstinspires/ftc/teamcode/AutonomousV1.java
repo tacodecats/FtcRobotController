@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -7,7 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -429,19 +432,19 @@ public class AutonomousV1 extends LinearOpMode {
 
     public void shooterServoRings(int numberOfRings) {
         for(int i = numberOfRings; i > 0; i = i - 1) {
-            shooterServo.setPosition(0.28);
-            sleep(400);
+            shooterServo.setPosition(0.38);
+            sleep(700);
             shooterServo.setPosition(0);
-            sleep(400);
+            sleep(700);
         }
     }
 
     public void powerOnShooterMotor() {
-        shooterMotor.setPower(-.75);
+        shooterMotor.setPower(-.85);
     }
 
     public void shootingThreeRings() {
-        shooterServoRings(4);
+        shooterServoRings(3);
         shooterMotor.setPower(0);
     }
 
@@ -452,10 +455,10 @@ public class AutonomousV1 extends LinearOpMode {
 
     //Drop wobble goal into place.
     public void dropWobbleGoal() {
-        wobbleArmMotor.setTargetPosition(210);
+        wobbleArmMotor.setTargetPosition(380);
         wobbleArmMotor.setPower(0.4);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sleep(750);
+        sleep(1000);
         wobbleArmMotor.setPower(0);
         sleep(500);
         wobbleArmServo.setPosition(0.45);
@@ -463,29 +466,18 @@ public class AutonomousV1 extends LinearOpMode {
 
     //Retract wobble goal arm
     public void retractWobbleGoalArm() {
-        wobbleArmMotor.setTargetPosition(40);
-        wobbleArmMotor.setPower(0.3);
+        wobbleArmMotor.setTargetPosition(100);
+        wobbleArmMotor.setPower(0.4);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(500);
         wobbleArmMotor.setPower(0);
         wobbleArmServo.setPosition(0);
-    }
-
-    //Set wobble goal arm to open up and set wobble arm servo to open.
-    public void openWobbleGoalArm() {
-        wobbleArmMotor.setTargetPosition(210);
-        wobbleArmMotor.setPower(0.5);
-        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sleep(500);
-        wobbleArmMotor.setPower(0);
-        sleep(250);
-        wobbleArmServo.setPosition(0.35);
     }
 
     public void pickUpWobbleGoal() {
         wobbleArmServo.setPosition(0);
         sleep(500);
-        wobbleArmMotor.setTargetPosition(190);
+        wobbleArmMotor.setTargetPosition(300);
         wobbleArmMotor.setPower(.75);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
@@ -506,21 +498,21 @@ public class AutonomousV1 extends LinearOpMode {
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        strafeDrive(.5,-17.5,-17.5);
+        strafeDrive(.5,-16,-16);
         //Move robot to shooter zone
         encoderDriveImu(.5,-20,-20, 0, "backward" );
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.5,-47.5,47.5);
+        encoderDrive(.5,-48,48);
         //Shoot three rings
         shootingThreeRings();
         //Turn robot to face second wobble goal
         encoderDrive(.5,48,-48);
         //Strafe robot to the left
-        strafeDrive(.5,-29,-29);
+        strafeDrive(.5,-28,-28);
         //Move forward to second wobble goal
-        encoderDriveImu(.5,-42,-42,0,"backward");
+        encoderDriveImu(.5,-41,-41,0,"backward");
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone A
@@ -543,9 +535,9 @@ public class AutonomousV1 extends LinearOpMode {
         //Strafe slightly towards left
         strafeDrive(.5,-10,-10);
         //Move robot towards shooter zone
-        encoderDriveImu(.5,-38,-38, 0, "backward");
+        encoderDriveImu(.5,-40,-40, 0, "backward");
         //Strafe right to shooter zone
-        strafeDrive(.5,23,23);
+        strafeDrive(.5,25,25);
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
@@ -555,14 +547,14 @@ public class AutonomousV1 extends LinearOpMode {
         //Power on intake motor
         intakeOn();
         //Move robot forward 20" to intake single ring
-        encoderDriveImu(.75,20,20,0,"forward");
+        encoderDriveImu(.5,20,20,0,"forward");
         //power off intake motor
-        intakeOff();
-        //power on shooter motor
         powerOnShooterMotor();
         //Move robot backwards 20"
-        encoderDriveImu(.75,-20,-20,0,"backward");
+        encoderDriveImu(.5,-20,-20,0,"backward");
         //Shoot one ring with shootingOneRing()
+        intakeOff();
+        //power on shooter motor
         shootingOneRing();
         //Turn robot to face second wobble goal
         encoderDrive(.5,47,-47);

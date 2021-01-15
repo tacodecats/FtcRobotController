@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
@@ -22,6 +24,7 @@ public class TeleDriveTeleOp extends LinearOpMode {
     private DcMotor wobbleArmMotor;
     private Servo shooterServo;
     private Servo wobbleArmServo;
+    double integral = 0;
 
     private void startGamepadHandlerThread() {
         telemetry.setAutoClear(true);
@@ -333,7 +336,6 @@ public class TeleDriveTeleOp extends LinearOpMode {
 
         startGamepadHandlerThread();
 
-
         //CUSTOM CODE GOES HERE
         frontRightMotor  = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
@@ -351,6 +353,7 @@ public class TeleDriveTeleOp extends LinearOpMode {
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wobbleArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Reverse left side drive train motors
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -370,7 +373,8 @@ public class TeleDriveTeleOp extends LinearOpMode {
         wobbleArmServo.setPosition(0);
 
     waitForStart();
-    if (opModeIsActive()) {
+
+        if (opModeIsActive()) {
       // Put run blocks here.
       while (opModeIsActive()) {
         // Put loop blocks here.
@@ -409,29 +413,34 @@ public class TeleDriveTeleOp extends LinearOpMode {
           }
 
           if (gamepad2.dpad_right) {
-              wobbleArmMotor.setTargetPosition(210);
-              wobbleArmMotor.setPower(0.3);
+              wobbleArmMotor.setTargetPosition(410);
+              wobbleArmMotor.setPower(0.4);
               wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-              sleep(500);
+              sleep(250);
               wobbleArmMotor.setPower(0);
           }
 
           if (gamepad2.dpad_up) {
-              wobbleArmMotor.setTargetPosition(170);
+              wobbleArmMotor.setTargetPosition(260);
               wobbleArmMotor.setPower(1);
               wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
           }
 
           if (gamepad2.dpad_left) {
-              wobbleArmMotor.setTargetPosition(90);
-              wobbleArmMotor.setPower(0.3);
+              wobbleArmMotor.setTargetPosition(110);
+              wobbleArmMotor.setPower(0.4);
               wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-              sleep(2000);
+              sleep(250);
               wobbleArmMotor.setPower(0);
           }
 
+          telemetry.addData("Current Position Arm Motor", wobbleArmMotor.getCurrentPosition());
+          telemetry.update();
+
+          wobbleArmMotor.setPower(gamepad2.left_stick_y);
+
           if(gamepad2.x) {
-              shooterServo.setPosition(0.28);
+              shooterServo.setPosition(0.38);
           } else {
               shooterServo.setPosition(0);
           }
@@ -443,7 +452,6 @@ public class TeleDriveTeleOp extends LinearOpMode {
           }
       }
     }
-
         canRunGamepadThread = false;
         socket.close();
     }
