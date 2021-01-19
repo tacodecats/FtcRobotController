@@ -1,6 +1,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -23,6 +25,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
+
 
 @Autonomous(name = "AutonomousV1")
 
@@ -85,7 +88,7 @@ public class AutonomousV1 extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(2.5, 16.0/9.0);
+            tfod.setZoom(2.0, 16.0/9.0);
 
             //Set IMU for drivetrain to drive straight
             BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -133,6 +136,7 @@ public class AutonomousV1 extends LinearOpMode {
             //Set servo position to 0
             shooterServo.setPosition(0);
             wobbleArmServo.setPosition(0);
+            
         }
 
         /** Wait for the game to begin */
@@ -510,7 +514,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal
         encoderDrive(.5,48,-48);
         //Strafe robot to the left
-        strafeDrive(.5,-28,-28);
+        strafeDrive(.5,-30,-30);
         //Move forward to second wobble goal
         encoderDriveImu(.5,-41,-41,0,"backward");
         //Pick up the second wobble goal
@@ -518,7 +522,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Move backwards towards target zone A
         encoderDriveImu(.5,60,60, 0, "forward");
         //Strafe robot right towards target zone A
-        strafeDrive(.5,34,34);
+        strafeDrive(.5,36,36);
         //Drop wobble goal in target zone A
         dropWobbleGoal();
         retractWobbleGoalArm();
@@ -545,7 +549,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Shoot three rings
         shootingThreeRings();
         //Power on intake motor
-        intakeOn();
+       /* intakeOn();
         //Move robot forward 20" to intake single ring
         encoderDriveImu(.5,20,20,0,"forward");
         //power off intake motor
@@ -556,10 +560,10 @@ public class AutonomousV1 extends LinearOpMode {
         intakeOff();
         //power on shooter motor
         shootingOneRing();
-        //Turn robot to face second wobble goal
+        //Turn robot to face second wobble goal */
         encoderDrive(.5,47,-47);
         //Strafe robot to the left
-        strafeDrive(.5,-29,-29);
+        strafeDrive(.5,-31,-31);
         //Move forward to second wobble goal
         encoderDriveImu(.75,-42,-42,0,"backward");
         //Pick up the second wobble goal
@@ -567,7 +571,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Move backwards towards target zone B
         encoderDriveImu(.75,84,84, 0, "forward");
         //Strafe robot right towards target zone B
-        strafeDrive(.5,10,10);
+        strafeDrive(.5,12,12);
         //Drop wobble goal in target zone B
         dropWobbleGoal();
         retractWobbleGoalArm();
@@ -584,11 +588,11 @@ public class AutonomousV1 extends LinearOpMode {
         //Strafe robot it the left
         strafeDrive(.5,-14,-14);
         //Move robot to shooter zone
-        encoderDriveImu(.5,-62,-62 ,0,"backwards");
+        encoderDriveImu(.75,-62,-62 ,0,"backwards");
         //Power on shooter motor
         powerOnShooterMotor();
         //Turn robot to face ring goal
-        encoderDrive(.75,-48,48);
+        encoderDrive(.5,-48,48);
         //Shoot three rings
         sleep(500);
         shootingThreeRings();
@@ -601,9 +605,9 @@ public class AutonomousV1 extends LinearOpMode {
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone C
-        encoderDriveImu(.75,106,106, 0, "forward");
+        encoderDriveImu(.75,104,104, 0, "forward");
         //Strafe robot right towards target zone C
-        strafeDrive(.5,35,35);
+        strafeDrive(.5,36,36);
         //Drop wobble goal in target zone C
         dropWobbleGoal();
         retractWobbleGoalArm();
