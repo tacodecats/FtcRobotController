@@ -514,7 +514,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal
         encoderDrive(.5,48,-48);
         //Strafe robot to the left
-        strafeDrive(.5,-30,-30);
+        strafeDrive(.5,-29,-29);
         //Move forward to second wobble goal
         encoderDriveImu(.5,-41,-41,0,"backward");
         //Pick up the second wobble goal
@@ -557,7 +557,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone B
-        encoderDriveImu(.75,84,84, 0, "forward");
+        encoderDriveImu(.5,84,84, 0, "forward");
         //Strafe robot right towards target zone B
         strafeDrive(.5,12,12);
         //Drop wobble goal in target zone B
@@ -575,27 +575,26 @@ public class AutonomousV1 extends LinearOpMode {
         dropWobbleGoal();
         //Strafe robot it the left
         strafeDrive(.5,-14,-14);
-        //Move robot to shooter zone
-        encoderDriveImu(.65,-62,-62 ,0,"backwards");
         //Power on shooter motor
         powerOnShooterMotor();
+        //Move robot to shooter zone
+        encoderDriveImu(.65,-62,-62 ,0,"backwards");
         //Turn robot to face ring goal
         encoderDrive(.5,-48,48);
         //Shoot three rings
-        sleep(500);
         shootingThreeRings();
         //Turn robot to face second wobble goal
         encoderDrive(.5,47,-47);
         //Strafe robot to the left
         strafeDrive(.5,-31,-31);
         //Move forward to second wobble goal
-        encoderDriveImu(.65,-42,-42,0,"backward");
+        encoderDriveImu(.5,-41,-41,0,"backward");
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone C
         encoderDriveImu(.65,104,104, 0, "forward");
         //Strafe robot right towards target zone C
-        strafeDrive(.5,36,36);
+        strafeDrive(.5,38,38);
         //Drop wobble goal in target zone C
         dropWobbleGoal();
         retractWobbleGoalArm();
