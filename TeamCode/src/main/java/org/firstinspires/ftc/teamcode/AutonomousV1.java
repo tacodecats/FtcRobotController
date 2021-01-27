@@ -434,10 +434,11 @@ public class AutonomousV1 extends LinearOpMode {
         BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+
     public void shooterServoRings(int numberOfRings) {
         for(int i = numberOfRings; i > 0; i = i - 1) {
             sleep(600);
-            shooterServo.setPosition(0.38);
+            shooterServo.setPosition(0.45);
             sleep(600);
             shooterServo.setPosition(0);
         }
@@ -480,7 +481,7 @@ public class AutonomousV1 extends LinearOpMode {
 
     public void pickUpWobbleGoal() {
         wobbleArmServo.setPosition(0);
-        sleep(500);
+        sleep(700);
         wobbleArmMotor.setTargetPosition(300);
         wobbleArmMotor.setPower(.75);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
