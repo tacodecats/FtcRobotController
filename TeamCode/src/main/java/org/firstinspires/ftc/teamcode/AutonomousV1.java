@@ -515,7 +515,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal
         encoderDrive(.5,48,-48);
         //Strafe robot to the left
-        strafeDrive(.5,-29,-29);
+        strafeDrive(.5,-27,-27);
         //Move forward to second wobble goal
         encoderDriveImu(.5,-41,-41,0,"backward");
         //Pick up the second wobble goal
@@ -552,7 +552,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal */
         encoderDrive(.5,47,-47);
         //Strafe robot to the left
-        strafeDrive(.5,-31,-31);
+        strafeDrive(.5,-30,-30);
         //Move forward to second wobble goal
         encoderDriveImu(.65,-42,-42,0,"backward");
         //Pick up the second wobble goal
@@ -575,7 +575,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Place wobble goal in square
         dropWobbleGoal();
         //Strafe robot it the left
-        strafeDrive(.5,-14,-14);
+        strafeDrive(.5,-15,-15);
         //Power on shooter motor
         powerOnShooterMotor();
         //Move robot to shooter zone
@@ -587,7 +587,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal
         encoderDrive(.5,47,-47);
         //Strafe robot to the left
-        strafeDrive(.5,-31,-31);
+        strafeDrive(.5,-29,-29);
         //Move forward to second wobble goal
         encoderDriveImu(.5,-41,-41,0,"backward");
         //Pick up the second wobble goal
