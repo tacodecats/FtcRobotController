@@ -512,7 +512,7 @@ public class AutonomousV1 extends LinearOpMode {
         encoderDrive(.5,-48,48);
         //Shoot three rings
         shootingThreeRings();
-        //Turn robot to face second wobble goal
+        //Turn robot to face second wobble goal.
         encoderDrive(.5,48,-48);
         //Strafe robot to the left
         strafeDrive(.5,-27,-27);
