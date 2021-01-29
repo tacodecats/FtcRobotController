@@ -359,6 +359,9 @@ public class TeleDriveTeleOp extends LinearOpMode {
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        // Reverse wobbleArmServo
+        wobbleArmServo.setDirection(Servo.Direction.REVERSE);
+
         // Reverse shooter motor so it goes in the correct direction
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 

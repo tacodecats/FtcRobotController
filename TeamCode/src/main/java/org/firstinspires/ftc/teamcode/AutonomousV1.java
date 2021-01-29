@@ -121,6 +121,10 @@ public class AutonomousV1 extends LinearOpMode {
             // Reverse shooter motor so it goes in the correct direction
             intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+            // Reverse wobbleArmServo
+            wobbleArmServo.setDirection(Servo.Direction.REVERSE);
+
+
             // Set drivetrain motors to brake when power is set to 0.
             FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -552,7 +556,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal */
         encoderDrive(.5,47,-47);
         //Strafe robot to the left
-        strafeDrive(.5,-30,-30);
+        strafeDrive(.5,-29,-29);
         //Move forward to second wobble goal
         encoderDriveImu(.65,-42,-42,0,"backward");
         //Pick up the second wobble goal
