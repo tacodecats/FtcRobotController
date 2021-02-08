@@ -501,7 +501,7 @@ public class AutonomousV1 extends LinearOpMode {
         intakeMotor.setPower(0);
     }
 
-    // Based on the rings, driving to respective box
+    // Based on the rings, driving to respective box.
     public void targetZoneA(){
         //Move forward to box A
         encoderDriveImu(.5, 78,78, 0, "forward");

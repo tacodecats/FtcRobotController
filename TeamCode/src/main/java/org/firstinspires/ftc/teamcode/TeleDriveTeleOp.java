@@ -347,7 +347,7 @@ public class TeleDriveTeleOp extends LinearOpMode {
         wobbleArmServo = hardwareMap.get(Servo.class, "wobbleArmServo");
 
 
-        // Set drivetrain motors to brake when power is set to 0.
+        // Set drivetrain motors to brake when power is set to 0
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
