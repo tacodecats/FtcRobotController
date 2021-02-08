@@ -1,4 +1,5 @@
 
+
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -519,7 +520,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal.
         encoderDrive(.5,48,-48);
         //Strafe robot to the left
-        strafeDrive(.5,-27,-27);
+        strafeDrive(.5,-26,-26);
         //Move forward to second wobble goal
         encoderDriveImu(.5,-41,-41,0,"backward");
         //Pick up the second wobble goal
@@ -591,7 +592,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Turn robot to face second wobble goal
         encoderDrive(.5,47,-47);
         //Strafe robot to the left
-        strafeDrive(.5,-29,-29);
+        strafeDrive(.5,-26,-26);
         //Move forward to second wobble goal
         encoderDriveImu(.5,-41,-41,0,"backward");
         //Pick up the second wobble goal
@@ -599,7 +600,7 @@ public class AutonomousV1 extends LinearOpMode {
         //Move backwards towards target zone C
         encoderDriveImu(.65,104,104, 0, "forward");
         //Strafe robot right towards target zone C
-        strafeDrive(.5,38,38);
+        strafeDrive(.5,35,35);
         //Drop wobble goal in target zone C
         dropWobbleGoal();
         retractWobbleGoalArm();

@@ -24,7 +24,6 @@ public class TeleDriveTeleOp extends LinearOpMode {
     private DcMotor wobbleArmMotor;
     private Servo shooterServo;
     private Servo wobbleArmServo;
-    double integral = 0;
 
     private void startGamepadHandlerThread() {
         telemetry.setAutoClear(true);
