@@ -359,7 +359,7 @@ public class TeleDriveTeleOp extends LinearOpMode {
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Reverse wobbleArmServo
-        wobbleArmServo.setDirection(Servo.Direction.REVERSE);
+        wobbleArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Reverse shooter motor so it goes in the correct direction
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -447,7 +447,7 @@ public class TeleDriveTeleOp extends LinearOpMode {
               shooterServo.setPosition(0);
           }
           if (gamepad2.right_bumper) {
-              wobbleArmServo.setPosition(0.35);
+              wobbleArmServo.setPosition(0.6);
           }
           if (gamepad2.left_bumper) {
               wobbleArmServo.setPosition(0);

@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -23,7 +24,6 @@ import java.util.List;
 
 
 @Autonomous(name = "AutonomousV2")
-
 public class AutonomousV2 extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
@@ -116,8 +116,8 @@ public class AutonomousV2 extends LinearOpMode {
             // Reverse shooter motor so it goes in the correct direction
             intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-            // Reverse wobbleArmServo
-            wobbleArmServo.setDirection(Servo.Direction.REVERSE);
+            // Reverse wobbleArmMotor
+            wobbleArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
             // Set drivetrain motors to brake when power is set to 0.
@@ -226,161 +226,29 @@ public class AutonomousV2 extends LinearOpMode {
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
-    public enum direction {
-        Forward,
-        Strafe45LeftForward,
-        StrafeLeft,
-        Strafe45LeftBackwards,
-        Backwards,
-        Strafe45RightBackwards,
-        StrafeRight,
-        Strafe45RightForwards
+    // set drive train power to 0
+    public void setPowerZero(){
+        FR.setPower(0);
+        FL.setPower(0);
+        BR.setPower(0);
+        BL.setPower(0);
     }
-    //Function adjust wheel motor power if current angle is less than target angle
-    public void firstAngleLessTargetAngle(double speed) {
-        FR.setPower(Math.abs(speed) + .05);
-        FL.setPower(Math.abs(speed) - .05);
-        BR.setPower(Math.abs(speed) + .05);
-        BL.setPower(Math.abs(speed) - .05);
+    // this stops the run to position.
+    public void runUsingEncoders(){
+        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    //Function adjust wheel motor power if current angle is greater than target angle
-    public void firstAngleGreaterTargetAngle (double speed) {
-        FR.setPower(Math.abs(speed) - .05);
-        FL.setPower(Math.abs(speed) + .05);
-        BR.setPower(Math.abs(speed) - .05);
-        BL.setPower(Math.abs(speed) + .05);
-    }
-    //this gets the absolute speed and converts it into power for the motor.
-    public void firstAngleEqualsTargetAngle (double speed) {
-        FR.setPower(Math.abs(speed));
-        FL.setPower(Math.abs(speed));
-        BR.setPower(Math.abs(speed));
-        BL.setPower(Math.abs(speed));
+    // resets all the data for the drive train encoders.
+    public void resetEncoders(){
+        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void encoderDriveImu(double speed, double leftInches, double rightInches, float targetAngle, direction direction){
-        // this creates the variables that will be calculated
-        int newLeftFrontTarget = 0;
-        int newRightFrontTarget = 0;
-        int newLeftBackTarget = 0;
-        int newRightBackTarget = 0;
-        // it calculates the distance that the robot has to move when you use the method.
-        newLeftFrontTarget = FL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
-        newRightFrontTarget = FR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
-        newRightBackTarget = BR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
-        newLeftBackTarget = BL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
-
-        //the robot will run to that position and stop once it gets to the position.
-        setDriveTrainRunUsingEncoder();
-
-        //this gets the absolute speed and converts it into power for the motor.
-        if (direction.equals(AutonomousV2.direction.Forward)) {
-            // this gets the position and makes the robot ready to move FORWARD
-            FL.setTargetPosition(newLeftFrontTarget);
-            FR.setTargetPosition(newRightFrontTarget);
-            BR.setTargetPosition(newRightBackTarget);
-            BL.setTargetPosition(newLeftBackTarget);
-            //Set IMU angle orientation
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() < newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() < newRightBackTarget){
-                if (angles.firstAngle < targetAngle){
-                    //Function adjust wheel motor power if current angle is less than target angle
-                    firstAngleLessTargetAngle(speed);
-                } else if (angles.firstAngle > targetAngle){
-                    //Function adjust wheel motor power if current angle is greater than target angle
-                    firstAngleGreaterTargetAngle(speed);
-                } else {
-                    //this gets the absolute speed and converts it into power for the motor.
-                    firstAngleEqualsTargetAngle(speed);
-                }
-            }
-        }else if (direction.equals(AutonomousV2.direction.StrafeRight)) {
-            // this gets the position and makes the robot ready to move FORWARD
-            FL.setTargetPosition(newLeftFrontTarget);
-            FR.setTargetPosition(-newRightFrontTarget);
-            BR.setTargetPosition(newRightBackTarget);
-            BL.setTargetPosition(-newLeftBackTarget);
-            //Set IMU angle orientation
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() > newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() > newRightBackTarget){
-                if (angles.firstAngle < targetAngle){
-                    //Function adjust wheel motor power if current angle is less than target angle
-                    firstAngleLessTargetAngle(speed);
-                } else if (angles.firstAngle > targetAngle){
-                    //Function adjust wheel motor power if current angle is greater than target angle
-                    firstAngleGreaterTargetAngle(speed);
-                } else {
-                    //this gets the absolute speed and converts it into power for the motor.
-                    firstAngleEqualsTargetAngle(speed);
-                }
-            }
-        }
-
-        else if (direction.equals(AutonomousV2.direction.StrafeLeft)) {
-            // this gets the position and makes the robot ready to move FORWARD
-            FL.setTargetPosition(-newLeftFrontTarget);
-            FR.setTargetPosition(newRightFrontTarget);
-            BR.setTargetPosition(-newRightBackTarget);
-            BL.setTargetPosition(newLeftBackTarget);
-            //Set IMU angle orientation
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            while (FL.getCurrentPosition() > newLeftFrontTarget && FR.getCurrentPosition() < newRightFrontTarget && BL.getCurrentPosition() > newLeftBackTarget && BR.getCurrentPosition() < newRightBackTarget){
-                if (angles.firstAngle < targetAngle){
-                    //Function adjust wheel motor power if current angle is less than target angle
-                    firstAngleLessTargetAngle(speed);
-                } else if (angles.firstAngle > targetAngle){
-                    //Function adjust wheel motor power if current angle is greater than target angle
-                    firstAngleGreaterTargetAngle(speed);
-                } else {
-                    //this gets the absolute speed and converts it into power for the motor.
-                    firstAngleEqualsTargetAngle(speed);
-                }
-            }
-        }
-
-        //Move backwards
-        else {
-            // this gets the position and makes the robot ready to move BACKWARDS
-            FL.setTargetPosition(-newLeftFrontTarget);
-            FR.setTargetPosition(-newRightFrontTarget);
-            BR.setTargetPosition(-newRightBackTarget);
-            BL.setTargetPosition(-newLeftBackTarget);
-            //Set IMU angle orientation
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            while (FL.getCurrentPosition() > newLeftFrontTarget && FR.getCurrentPosition() > newRightFrontTarget && BL.getCurrentPosition() > newLeftBackTarget && BR.getCurrentPosition() > newRightBackTarget){
-                if (angles.firstAngle < targetAngle){
-                    //Function adjust wheel motor power if current angle is less than target angle
-                    firstAngleLessTargetAngle(speed);
-                } else if (angles.firstAngle > targetAngle){
-                    firstAngleGreaterTargetAngle(speed);
-                } else {
-                    //this gets the absolute speed and converts it into power for the motor.
-                    firstAngleEqualsTargetAngle(speed);
-                }
-            }
-        }
-
-
-        while (FR.isBusy() && FL.isBusy() && BR.isBusy() && BL.isBusy()) {
-            telemetry.addData("FL:", FL.getCurrentPosition()  );
-            telemetry.addData("FR:", FR.getCurrentPosition()  );
-            telemetry.addData("BL:", BL.getCurrentPosition()  );
-            telemetry.addData("BR:", BR.getCurrentPosition()  );
-            telemetry.update();
-        }
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-
-        // set drive train motor power to zero.
-        setDriveTrainPowerToZero();
-        // this stops the run to position.
-        setDriveTrainRunUsingEncoder();
-        // resets all the data for the encoders.
-        stopAndResetDriveTrainEncoder();
-
-    }
-
-    public void encoderDrive(double speed, double leftInches, double rightInches){
+    public void forwardDrive(double speed, double leftInches, double rightInches, float targetAngle){
         // this creates the variables that will be calculated
         int newLeftFrontTarget = 0;
         int newRightFrontTarget = 0;
@@ -403,54 +271,166 @@ public class AutonomousV2 extends LinearOpMode {
         BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         //this gets the absolute speed and converts it into power for the motor.
-        FR.setPower(Math.abs(speed));
-        FL.setPower(Math.abs(speed));
-        BR.setPower(Math.abs(speed));
-        BL.setPower(Math.abs(speed));
-
-        while (FR.isBusy() && FL.isBusy() && BR.isBusy() && BL.isBusy()) {
-            telemetry.addData("FL:", FL.getCurrentPosition()  );
-            telemetry.addData("FR:", FR.getCurrentPosition()  );
-            telemetry.addData("BL:", BL.getCurrentPosition()  );
-            telemetry.addData("BR:", BR.getCurrentPosition()  );
-            telemetry.update();
-        }
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-
-        // set drive train motor power to zero.
-        setDriveTrainPowerToZero();
+            while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() < newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() < newRightBackTarget){
+                //Set IMU angle orientation
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                if (angles.firstAngle < targetAngle){
+                    FR.setPower(Math.abs(speed) + .05);
+                    FL.setPower(Math.abs(speed) - .05);
+                    BR.setPower(Math.abs(speed) + .05);
+                    BL.setPower(Math.abs(speed) - .05);
+                } else if (angles.firstAngle > targetAngle){
+                    FR.setPower(Math.abs(speed) - .05);
+                    FL.setPower(Math.abs(speed) + .05);
+                    BR.setPower(Math.abs(speed) - .05);
+                    BL.setPower(Math.abs(speed) + .05);
+                } else {
+                    //this gets the absolute speed and converts it into power for the motor.
+                    FR.setPower(Math.abs(speed));
+                    FL.setPower(Math.abs(speed));
+                    BR.setPower(Math.abs(speed));
+                    BL.setPower(Math.abs(speed));
+                }
+            }
+        // set drive train power to 0
+        setPowerZero();
+        sleep(250);
         // this stops the run to position.
-        setDriveTrainRunUsingEncoder();
-        // resets all the data for the encoders.
-        stopAndResetDriveTrainEncoder();
+        runUsingEncoders();
+        // resets all the data for the drive train encoders.
+        resetEncoders();
+    }
+    public void backwardDrive(double speed, double leftInches, double rightInches, float targetAngle){
+        // this creates the variables that will be calculated
+        int newLeftFrontTarget = 0;
+        int newRightFrontTarget = 0;
+        int newLeftBackTarget = 0;
+        int newRightBackTarget = 0;
+        // it calculates the distance that the robot has to move when you use the method.
+        newLeftFrontTarget = FL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        newRightFrontTarget = FR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newRightBackTarget = BR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newLeftBackTarget = BL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        // this gets the position and makes the robot ready to move
+        FL.setTargetPosition(-newLeftFrontTarget);
+        FR.setTargetPosition(-newRightFrontTarget);
+        BR.setTargetPosition(-newRightBackTarget);
+        BL.setTargetPosition(-newLeftBackTarget);
 
+        //the robot will run to that position and stop once it gets to the position.
+        FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //this gets the absolute speed and converts it into power for the motor.
+        while (FL.getCurrentPosition() > -newLeftFrontTarget && FR.getCurrentPosition() > -newRightFrontTarget && BL.getCurrentPosition() > -newLeftBackTarget && BR.getCurrentPosition() > -newRightBackTarget){
+            //Set IMU angle orientation
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            //Reduces speed of the drive train motors as they approach the end of their path
+            if (angles.firstAngle < targetAngle){
+                FR.setPower(Math.abs(speed) - .05);
+                FL.setPower(Math.abs(speed) + .05);
+                BR.setPower(Math.abs(speed) - .05);
+                BL.setPower(Math.abs(speed) + .05);
+            } else if (angles.firstAngle > targetAngle){
+                FR.setPower(Math.abs(speed) + .05);
+                FL.setPower(Math.abs(speed) - .05);
+                BR.setPower(Math.abs(speed) + .05);
+                BL.setPower(Math.abs(speed) - .05);
+            } else {
+                //this gets the absolute speed and converts it into power for the motor.
+                FR.setPower(Math.abs(speed));
+                FL.setPower(Math.abs(speed));
+                BR.setPower(Math.abs(speed));
+                BL.setPower(Math.abs(speed));
+            }
+        }
+        // set drive train power to 0
+        setPowerZero();
+        sleep(250);
+        // this stops the run to position.
+        runUsingEncoders();
+        // resets all the data for the drive train encoders.
+        resetEncoders();
     }
 
-    // set drive train motor power to zero.
-    public void setDriveTrainPowerToZero(){
-        FR.setPower(0);
-        FL.setPower(0);
-        BR.setPower(0);
-        BL.setPower(0);
-    }
+    public void strafeRight(double speed, double leftInches, double rightInches, float targetAngle){
+        // this creates the variables that will be calculated
+        int newLeftFrontTarget = 0;
+        int newRightFrontTarget = 0;
+        int newLeftBackTarget = 0;
+        int newRightBackTarget = 0;
+        // it calculates the distance that the robot has to move when you use the method.
+        newLeftFrontTarget = FL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        newRightFrontTarget = FR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newRightBackTarget = BR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newLeftBackTarget = BL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        // this gets the position and makes the robot ready to move
+        FL.setTargetPosition(newLeftFrontTarget);
+        FR.setTargetPosition(-newRightFrontTarget);
+        BR.setTargetPosition(newRightBackTarget);
+        BL.setTargetPosition(-newLeftBackTarget);
 
-    // this stops the run to position.
-    public void setDriveTrainRunUsingEncoder() {
-        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //the robot will run to that position and stop once it gets to the position.
+        FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //this gets the absolute speed and converts it into power for the motor.
+        while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() > -newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() > -newRightBackTarget){
+                //this gets the absolute speed and converts it into power for the motor.
+                FR.setPower(Math.abs(speed));
+                FL.setPower(Math.abs(speed));
+                BR.setPower(Math.abs(speed));
+                BL.setPower(Math.abs(speed));
+        }
+        // set drive train power to 0
+        setPowerZero();
+        sleep(250);
+        // this stops the run to position.
+        runUsingEncoders();
+        // resets all the data for the drive train encoders.
+        resetEncoders();
     }
+    public void strafeLeft(double speed, double leftInches, double rightInches, float targetAngle){
+        // this creates the variables that will be calculated
+        int newLeftFrontTarget = 0;
+        int newRightFrontTarget = 0;
+        int newLeftBackTarget = 0;
+        int newRightBackTarget = 0;
+        // it calculates the distance that the robot has to move when you use the method.
+        newLeftFrontTarget = FL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        newRightFrontTarget = FR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newRightBackTarget = BR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newLeftBackTarget = BL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        // this gets the position and makes the robot ready to move
+        FL.setTargetPosition(-newLeftFrontTarget);
+        FR.setTargetPosition(newRightFrontTarget);
+        BR.setTargetPosition(-newRightBackTarget);
+        BL.setTargetPosition(newLeftBackTarget);
 
-    // resets all the data for the encoders.
-    public void stopAndResetDriveTrainEncoder() {
-        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //the robot will run to that position and stop once it gets to the position.
+        FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //this gets the absolute speed and converts it into power for the motor.
+        while (FL.getCurrentPosition() > -newLeftFrontTarget && FR.getCurrentPosition() < newRightFrontTarget && BL.getCurrentPosition() > -newLeftBackTarget && BR.getCurrentPosition() < newRightBackTarget){
+                //this gets the absolute speed and converts it into power for the motor.
+                FR.setPower(Math.abs(speed));
+                FL.setPower(Math.abs(speed));
+                BR.setPower(Math.abs(speed));
+                BL.setPower(Math.abs(speed));
+        }
+        // set drive train power to 0
+        setPowerZero();
+        sleep(250);
+        // this stops the run to position.
+        runUsingEncoders();
+        // resets all the data for the drive train encoders.
+        resetEncoders();
     }
-
 
     public void shooterServoRings(int numberOfRings) {
         for(int i = numberOfRings; i > 0; i = i - 1) {
@@ -465,25 +445,27 @@ public class AutonomousV2 extends LinearOpMode {
         shooterMotor.setPower(-.75);
     }
 
+    public void powerOffShooter() {
+        shooterMotor.setPower(0);
+    }
+
     public void shootingThreeRings() {
         shooterServoRings(3);
-        shooterMotor.setPower(0);
     }
 
     public void shootingOneRing() {
         shooterServoRings(1);
-        shooterMotor.setPower(0);
     }
 
     //Drop wobble goal into place.
     public void dropWobbleGoal() {
-        wobbleArmMotor.setTargetPosition(380);
+        wobbleArmMotor.setTargetPosition(480);
         wobbleArmMotor.setPower(0.5);
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(1000);
         wobbleArmMotor.setPower(0);
         sleep(500);
-        wobbleArmServo.setPosition(0.45);
+        wobbleArmServo.setPosition(0.6);
     }
 
     //Retract wobble goal arm
@@ -493,7 +475,13 @@ public class AutonomousV2 extends LinearOpMode {
         wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         sleep(500);
         wobbleArmMotor.setPower(0);
-        wobbleArmServo.setPosition(0);
+    }
+
+    public void openWobbleGoalArm() {
+        wobbleArmMotor.setTargetPosition(580);
+        wobbleArmMotor.setPower(0.5);
+        wobbleArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(1000);
     }
 
     public void pickUpWobbleGoal() {
@@ -515,109 +503,129 @@ public class AutonomousV2 extends LinearOpMode {
 
     // Based on the rings, driving to respective box.
     public void targetZoneA(){
-        //Move forward to box A
-        encoderDriveImu(.5, 78,78, 0, direction.Forward);
+        //Move backward to box A
+        backwardDrive(.5, 68,68, 0);
         //Place wobble goal in square
         dropWobbleGoal();
-        //Strafe robot to the left
-        encoderDriveImu(.5,16,16, 0,direction.StrafeLeft);
         //Power on shooter motor
         powerOnShooterMotor();
+        //Retract wobble goal arm
+        retractWobbleGoalArm();
+        //Strafe robot it the right
+        strafeRight(.5,14,14, 0);
         //Move robot to shooter zone
-        encoderDriveImu(.5,20,20, 0, direction.Backwards );
-        //Turn robot to face ring goal
-        encoderDrive(.5,-48,48);
+        forwardDrive(.5,9,9, 0);
         //Shoot three rings
         shootingThreeRings();
-        //Turn robot to face second wobble goal.
-        encoderDrive(.5,48,-48);
-        //Strafe robot to the left
-        encoderDriveImu(.5,26,26, 0, direction.StrafeLeft);
+        //Power off shooter
+        powerOffShooter();
+        //Strafe robot to the right
+        strafeRight(.5,30,30, 0);
         //Move forward to second wobble goal
-        encoderDriveImu(.5,41,41,0,direction.Backwards);
+        forwardDrive(.5,55,55,0);
+        //Open wobble goal arm
+        openWobbleGoalArm();
+        backwardDrive(.5,3,3,0);
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone A
-        encoderDriveImu(.5,60,60, 0, direction.Forward);
-        //Strafe robot right towards target zone A
-        encoderDriveImu(.5,36,36, 0, direction.StrafeRight);
+        backwardDrive(.5,62,62, 0);
+        //Strafe robot left towards target zone A
+        strafeLeft(.5,32,32, 0);
         //Drop wobble goal in target zone A
         dropWobbleGoal();
+        //Retract wobble goal arm
         retractWobbleGoalArm();
         sleep(30000);
     }
     //Steps for single ring
     public void targetZoneB(){
         //Move forward towards box B
-        encoderDriveImu(.65, 98,98, 0, direction.Forward);
-        //Strafe left into box B (left and right numbers are negative)
-        encoderDriveImu(.5,28,28, 0, direction.StrafeLeft);
+        backwardDrive(.75, 86,86, 0);
+        //Strafe right into box B
+        strafeRight(.5,28,28, 0);
         //Place wobble goal in square
         dropWobbleGoal();
-        //Strafe slightly towards left
-        encoderDriveImu(.5,10,10, 0, direction.StrafeLeft);
-        //Move robot towards shooter zone
-        encoderDriveImu(.5,41,41, 0, direction.Backwards);
+        //Retract wobble goal arm
+        retractWobbleGoalArm();
         //Power on shooter motor
         powerOnShooterMotor();
-        //Strafe right to shooter zone
-        encoderDriveImu(.5,24,24, 0, direction.StrafeRight);
-        //Turn robot to face ring goal
-        encoderDrive(.5,-48,48);
+        //Move robot towards shooter zone
+        forwardDrive(.5,32,32, 0);
+        //Strafe left to shooter zone
+        strafeLeft(.5,8,8, 0);
         //Shoot three rings
         shootingThreeRings();
-        //Turn robot to face second wobble goal */
-        encoderDrive(.5,47,-47);
-        //Strafe robot to the left
-        encoderDriveImu(.5,29,29, 0 ,direction.StrafeLeft);
+        //Power on intake
+        intakeOn();
+        //Move backward to single ring on field
+        forwardDrive(.5,22,22,0);
+        //Move forward to navigation line to shoot
+        backwardDrive(.5, 22,22, 0);
+        //Turn off intake
+        intakeOff();
+        //Shoot single ring
+        shootingOneRing();
+        //Power off shooter
+        powerOffShooter();
+        //Strafe robot to the right
+        strafeRight(.75,30,30, 0);
         //Move forward to second wobble goal
-        encoderDriveImu(.65,42,42,0,direction.Backwards);
+        forwardDrive(.75,55,55,0);
+        //Open wobble goal arm
+        openWobbleGoalArm();
+        backwardDrive(.5,3,3,0);
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone B
-        encoderDriveImu(.5,84,84, 0, direction.Forward);
-        //Strafe robot right towards target zone B
-        encoderDriveImu(.5,12,12, 0, direction.StrafeRight);
+        backwardDrive(.75,80,80, 0);
+        //Strafe robot left towards target zone B
+        strafeLeft(.75,3,3, 0);
         //Drop wobble goal in target zone B
         dropWobbleGoal();
+        //Move forward to navigation line
+        forwardDrive(1,20,20,0);
+        //Retract wobble goal arm
         retractWobbleGoalArm();
-        //Move backwards  to shooting line
-        encoderDriveImu(.75,24,24,0,direction.Backwards);
         sleep(30000);
     }
     //Steps for four rings.
     public void targetZoneC(){
         //Move forward to box C
-        encoderDriveImu(.65, 122,122, 0, direction.Forward);
+        backwardDrive(.75, 118,118, 0);
         //Place wobble goal in square
         dropWobbleGoal();
-        //Strafe robot it the left
-        encoderDriveImu(.5,15,15, 0, direction.StrafeLeft);
+        //Retract wobble goal arm
+        retractWobbleGoalArm();
+        //Strafe robot it the right
+        strafeRight(.5,15,15, 0);
         //Power on shooter motor
         powerOnShooterMotor();
         //Move robot to shooter zone
-        encoderDriveImu(.65,62,62 ,0,direction.Backwards);
-        //Turn robot to face ring goal
-        encoderDrive(.5,-48,48);
+        forwardDrive(.5,59,59., 0);
         //Shoot three rings
         shootingThreeRings();
-        //Turn robot to face second wobble goal
-        encoderDrive(.5,47,-47);
-        //Strafe robot to the left
-        encoderDriveImu(.5,26,26, 0, direction.StrafeLeft);
+        //Power shooter off
+        powerOffShooter();
+        //Strafe robot to the right
+        strafeRight(.75,30,30, 0);
         //Move forward to second wobble goal
-        encoderDriveImu(.5,41,41,0,direction.Backwards);
+        forwardDrive(.75,55,55,0);
+        //Open wobble goal arm
+        openWobbleGoalArm();
+        backwardDrive(.5,3,3,0);
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone C
-        encoderDriveImu(.65,104,104, 0, direction.Forward);
-        //Strafe robot right towards target zone C
-        encoderDriveImu(.5,35,35, 0, direction.StrafeRight);
+        backwardDrive(.75,104,104, 0);
+        //Strafe robot left towards target zone C
+        strafeLeft(.75,36,36, 0);
         //Drop wobble goal in target zone C
         dropWobbleGoal();
+        //Move forward to navigation line
+        forwardDrive(1,35,35,0);
+        //Retract wobble goal arm
         retractWobbleGoalArm();
-        //Move backwards  to shooting line
-        encoderDriveImu(.75,46,46,0,direction.Backwards);
         sleep(30000);
     }
 
