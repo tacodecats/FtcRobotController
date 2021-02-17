@@ -431,6 +431,158 @@ public class AutonomousV3 extends LinearOpMode {
         resetEncoders();
     }
 
+    public void strafeFR(double speed, double leftInches, double rightInches, float targetAngle){
+        // this creates the variables that will be calculated
+        int newLeftFrontTarget = 0;
+        int newRightFrontTarget = 0;
+        int newLeftBackTarget = 0;
+        int newRightBackTarget = 0;
+        // it calculates the distance that the robot has to move when you use the method.
+        newLeftFrontTarget = FL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        newRightFrontTarget = FR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newRightBackTarget = BR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+        newLeftBackTarget = BL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+        // this gets the position and makes the robot ready to move
+        FL.setTargetPosition(newLeftFrontTarget);
+        FR.setTargetPosition(-newRightFrontTarget);
+        BR.setTargetPosition(newRightBackTarget);
+        BL.setTargetPosition(-newLeftBackTarget);
+
+        //the robot will run to that position and stop once it gets to the position.
+        FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //this gets the absolute speed and converts it into power for the motor.
+        while (FL.getCurrentPosition() === 0 && FR.getCurrentPosition() < -newRightFrontTarget && BL.getCurrentPosition() === 0 && BR.getCurrentPosition() > -newRightBackTarget){
+            //this gets the absolute speed and converts it into power for the motor.
+            FR.setPower(Math.abs(speed));
+            FL.setPower(Math.abs(speed));
+            BR.setPower(Math.abs(speed));
+            BL.setPower(Math.abs(speed));
+        }
+
+        setPowerZero();
+        sleep(250);
+        // this stops the run to position.
+        runUsingEncoders();
+        // resets all the data for the drive train encoders.
+
+
+        public void strafeFL(double speed, double leftInches, double rightInches, float targetAngle){
+            // this creates the variables that will be calculated
+            int newLeftFrontTarget = 0;
+            int newRightFrontTarget = 0;
+            int newLeftBackTarget = 0;
+            int newRightBackTarget = 0;
+            // it calculates the distance that the robot has to move when you use the method.
+            newLeftFrontTarget = FL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+            newRightFrontTarget = FR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+            newRightBackTarget = BR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+            newLeftBackTarget = BL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+            // this gets the position and makes the robot ready to move
+            FL.setTargetPosition(newLeftFrontTarget);
+            FR.setTargetPosition(-newRightFrontTarget);
+            BR.setTargetPosition(newRightBackTarget);
+            BL.setTargetPosition(-newLeftBackTarget);
+
+            //the robot will run to that position and stop once it gets to the position.
+            FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //this gets the absolute speed and converts it into power for the motor.
+            while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() === 0 && BL.getCurrentPosition() < newLeftBackTarget && BR.getCurrentPosition() === 0){
+                //this gets the absolute speed and converts it into power for the motor.
+                FR.setPower(Math.abs(speed));
+                FL.setPower(Math.abs(speed));
+                BR.setPower(Math.abs(speed));
+                BL.setPower(Math.abs(speed));
+            }
+
+            setPowerZero();
+            sleep(250);
+            // this stops the run to position.
+            runUsingEncoders();
+            // resets all the data for the drive train encoders.
+            resetEncoders();
+
+            public void strafeBL(double speed, double leftInches, double rightInches, float targetAngle){
+                // this creates the variables that will be calculated
+                int newLeftFrontTarget = 0;
+                int newRightFrontTarget = 0;
+                int newLeftBackTarget = 0;
+                int newRightBackTarget = 0;
+                // it calculates the distance that the robot has to move when you use the method.
+                newLeftFrontTarget = FL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+                newRightFrontTarget = FR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+                newRightBackTarget = BR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+                newLeftBackTarget = BL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+                // this gets the position and makes the robot ready to move
+                FL.setTargetPosition(newLeftFrontTarget);
+                FR.setTargetPosition(-newRightFrontTarget);
+                BR.setTargetPosition(newRightBackTarget);
+                BL.setTargetPosition(-newLeftBackTarget);
+
+                //the robot will run to that position and stop once it gets to the position.
+                FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                //this gets the absolute speed and converts it into power for the motor.
+                while (FL.getCurrentPosition() < newLeftFrontTarget && FR.getCurrentPosition() === 0 && BL.getCurrentPosition() === 0 &&  BR.getCurrentPosition() > newRightBackTarget){
+                    //this gets the absolute speed and converts it into power for the motor.
+                    FR.setPower(Math.abs(speed));
+                    FL.setPower(Math.abs(speed));
+                    BR.setPower(Math.abs(speed));
+                    BL.setPower(Math.abs(speed));
+                }
+
+                setPowerZero();
+                sleep(250);
+                // this stops the run to position.
+                runUsingEncoders();
+                // resets all the data for the drive train encoders.
+                resetEncoders();
+
+                public void strafeBR(double speed, double leftInches, double rightInches, float targetAngle){
+                    // this creates the variables that will be calculated
+                    int newLeftFrontTarget = 0;
+                    int newRightFrontTarget = 0;
+                    int newLeftBackTarget = 0;
+                    int newRightBackTarget = 0;
+                    // it calculates the distance that the robot has to move when you use the method.
+                    newLeftFrontTarget = FL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+                    newRightFrontTarget = FR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+                    newRightBackTarget = BR.getCurrentPosition() + (int)(rightInches * TICKS_PER_INCH);
+                    newLeftBackTarget = BL.getCurrentPosition() + (int)(leftInches * TICKS_PER_INCH);
+                    // this gets the position and makes the robot ready to move
+                    FL.setTargetPosition(newLeftFrontTarget);
+                    FR.setTargetPosition(-newRightFrontTarget);
+                    BR.setTargetPosition(newRightBackTarget);
+                    BL.setTargetPosition(-newLeftBackTarget);
+
+                    //the robot will run to that position and stop once it gets to the position.
+                    FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    //this gets the absolute speed and converts it into power for the motor.
+                    while (FL.getCurrentPosition() ===0 && FR.getCurrentPosition() > -newRightFrontTarget && BL.getCurrentPosition() < newLeftBackTarget &&  BR.getCurrentPosition()===0){
+                        //this gets the absolute speed and converts it into power for the motor.
+                        FR.setPower(Math.abs(speed));
+                        FL.setPower(Math.abs(speed));
+                        BR.setPower(Math.abs(speed));
+                        BL.setPower(Math.abs(speed));
+                    }
+
+                    setPowerZero();
+                    sleep(250);
+                    // this stops the run to position.
+                    runUsingEncoders();
+                    // resets all the data for the drive train encoders.
+                    resetEncoders();
+
     public void shooterServoRings(int numberOfRings) {
         for(int i = numberOfRings; i > 0; i = i - 1) {
             sleep(600);
