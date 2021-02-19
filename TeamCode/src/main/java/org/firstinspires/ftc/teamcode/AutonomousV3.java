@@ -597,12 +597,12 @@ public class AutonomousV3 extends LinearOpMode {
         dropWobbleGoal();
         //Retract wobble goal arm
         retractWobbleGoalArm();
+        //Power on shooter motor
+        powerOnShooterMotor();
         //Strafe robot it the right
         strafeRight(.5,15,15, 0);
         //Move robot to shooter zone
         forwardDrive(.5,59,59, 0);
-        //Power on shooter motor
-        powerOnShooterMotor();
         //Shoot three rings
         shootingThreeRings();
         //Power shooter off

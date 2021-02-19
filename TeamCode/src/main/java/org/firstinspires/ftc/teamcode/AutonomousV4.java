@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -23,6 +24,7 @@ import java.util.List;
 
 
 @Autonomous(name = "AutonomousV4")
+@Disabled
 public class AutonomousV4 extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
@@ -506,7 +508,7 @@ public class AutonomousV4 extends LinearOpMode {
         FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         //this gets the absolute speed and converts it into power for the motor.
-        while (FL.getCurrentPosition() > newLeftFrontTarget && BR.getCurrentPosition() > newRightBackTarget){
+        while (FL.getCurrentPosition() > -newLeftFrontTarget && BR.getCurrentPosition() > -newRightBackTarget){
             //this gets the absolute speed and converts it into power for the motor.
             FL.setPower(Math.abs(speed));
             BR.setPower(Math.abs(speed));
@@ -535,7 +537,7 @@ public class AutonomousV4 extends LinearOpMode {
         FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         //this gets the absolute speed and converts it into power for the motor.
-        while (FR.getCurrentPosition() > newRightFrontTarget && BL.getCurrentPosition() > newLeftBackTarget){
+        while (FR.getCurrentPosition() > -newRightFrontTarget && BL.getCurrentPosition() > -newLeftBackTarget){
             //this gets the absolute speed and converts it into power for the motor.
             FR.setPower(Math.abs(speed));
             BL.setPower(Math.abs(speed));
@@ -715,7 +717,7 @@ public class AutonomousV4 extends LinearOpMode {
         //Retract wobble goal arm
         retractWobbleGoalArm();
         //Strafe ForwardRight at 45 degree angle //Strafe robot it the right
-        strafeFR(.5,34,34,0);
+        strafeFR(.75,38,38,0);
         //Power on shooter motor
         powerOnShooterMotor();
         //Move robot to shooter zone
@@ -725,18 +727,18 @@ public class AutonomousV4 extends LinearOpMode {
         //Power shooter off
         powerOffShooter();
         //Strafe robot to the right
-        strafeRight(.75,30,30, 0);
+        strafeFR(.75,68,68, 0);
         //Move forward to second wobble goal
-        forwardDrive(.75,55,55,0);
+        forwardDrive(.5,16,16,0);
         //Open wobble goal arm
         openWobbleGoalArm();
         backwardDrive(.5,3,3,0);
         //Pick up the second wobble goal
         pickUpWobbleGoal();
         //Move backwards towards target zone C
-        backwardDrive(.75,104,104, 0);
+        strafeBL(.75,80,80, 0);
         //Strafe robot left towards target zone C
-        strafeLeft(.75,36,36, 0);
+        backwardDrive(.75,62,62, 0);
         //Drop wobble goal in target zone C
         dropWobbleGoal();
         //Move forward to navigation line
